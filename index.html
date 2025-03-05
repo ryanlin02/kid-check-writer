@@ -411,8 +411,8 @@
     .number-input-modal {
         background-color: var(--primary-color);
         border-radius: 12px;
-        width: 90%;
-        max-width: 300px; /* 更窄一點 */
+        width: 95%; /* 從 90% 改為 95%，使模態框更寬 */
+        max-width: 350px; /* 從 300px 改為 350px，增加最大寬度 */
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         overflow: hidden;
         animation: modalSlideIn 0.3s ease-out;
@@ -436,32 +436,32 @@
     .calculator-display {
         background-color: #222222;
         color: var(--text-color);
-        font-size: 28px; /* 增加字體大小 */
-        padding: 8px 15px; /* 減少上下內邊距 */
+        font-size: 32px; /* 從 28px 改為 32px */
+        padding: 10px 15px; /* 從 8px 15px 改為 10px 15px */
         text-align: right;
-        margin: 8px;
-        border-radius: 5px;
+        margin: 10px; /* 從 8px 改為 10px */
+        border-radius: 6px; /* 從 5px 改為 6px */
         border: 1px solid var(--border-color);
-        height: 36px; /* 減少高度 */
+        height: 46px; /* 從 36px 改為 46px */
         display: flex;
         align-items: center;
         justify-content: flex-end;
         overflow: hidden;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3); /* 添加內陰影效果 */
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     .calculator-buttons {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         grid-template-rows: repeat(5, auto);
-        gap: 4px;
-        padding: 6px;
+        gap: 6px; /* 從 4px 改為 6px */
+        padding: 10px; /* 從 6px 改為 10px */
     }
 
     .calculator-buttons button {
-        padding: 8px 0;
-        font-size: 17px;
-        border-radius: 8px;
+        padding: 10px 0; /* 從 8px 0 改為 10px 0 */
+        font-size: 20px; /* 從 17px 改為 20px */
+        border-radius: 10px; /* 從 8px 改為 10px */
         background-color: #3a3a3a;
         color: var(--text-color);
         border: none;
@@ -470,7 +470,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 38px;
+        height: 48px; /* 從 38px 改為 48px */
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         position: relative;
         overflow: hidden;
@@ -1171,6 +1171,13 @@
     let selectedDate = null;
     let currentDatePickerDate = new Date();
 
+    // 震動函數
+    function vibrateOnClick() {
+        if (navigator.vibrate) {
+            navigator.vibrate(30);
+        }
+    }
+
     // 將數字轉換為中文大寫函數 (改進版)
     function numberToChineseUppercase(num) {
         if (isNaN(num)) return '';
@@ -1345,6 +1352,10 @@
     // 關閉模態框
     function closeModal(modalId) {
         document.getElementById(modalId).style.display = 'none';
+
+        // 添加震動效果
+        vibrateOnClick();
+
     }
     
     // 計算機數字輸入
@@ -1356,6 +1367,10 @@
             calculatorValue = calculatorValue === '0' ? num.toString() : calculatorValue + num.toString();
         }
         document.getElementById('calculatorDisplay').textContent = calculatorValue;
+
+        // 添加震動效果
+        vibrateOnClick();
+
     }
     
     // 計算機清除
@@ -1365,6 +1380,10 @@
         calculatorFirstValue = null;
         calculatorWaitingForSecondValue = false;
         document.getElementById('calculatorDisplay').textContent = calculatorValue;
+
+        // 添加震動效果
+        vibrateOnClick();
+        
     }
     
     // 計算機退格
@@ -1375,6 +1394,10 @@
             calculatorValue = '0';
         }
         document.getElementById('calculatorDisplay').textContent = calculatorValue;
+
+        // 添加震動效果
+        vibrateOnClick();
+        
     }
     
     // 計算機小數點
@@ -1396,6 +1419,10 @@
         // 如果已有第一個值和運算符，先進行計算
         if (calculatorFirstValue !== null && calculatorOperator !== null && !calculatorWaitingForSecondValue) {
             calculatorEquals();
+
+        // 添加震動效果
+        vibrateOnClick();
+        
         }
         
         calculatorFirstValue = parseFloat(calculatorValue);
@@ -1432,6 +1459,10 @@
         calculatorOperator = null;
         calculatorFirstValue = result;
         calculatorWaitingForSecondValue = true;
+
+        // 添加震動效果
+        vibrateOnClick();
+        
     }
     
     // 提交計算機值
@@ -1685,6 +1716,10 @@
     function selectDate(year, month, day) {
         selectedDate = new Date(year, month, day);
         updateDatePickerCalendar();
+
+        // 添加震動效果
+        vibrateOnClick();
+        
     }
     
     // 選擇今天
@@ -1693,18 +1728,30 @@
         currentDatePickerDate = today;
         selectedDate = today;
         updateDatePickerCalendar();
+
+        // 添加震動效果
+        vibrateOnClick();
+        
     }
     
     // 上個月
     function prevMonth() {
         currentDatePickerDate.setMonth(currentDatePickerDate.getMonth() - 1);
         updateDatePickerCalendar();
+
+        // 添加震動效果
+        vibrateOnClick();
+        
     }
 
     // 下個月
     function nextMonth() {
         currentDatePickerDate.setMonth(currentDatePickerDate.getMonth() + 1);
         updateDatePickerCalendar();
+
+        // 添加震動效果
+        vibrateOnClick();
+        
     }
 
     // 帶動畫效果的上個月函數
@@ -1734,6 +1781,10 @@
         if (!selectedDate) {
             showToast('請選擇一個日期');
             return;
+
+        // 添加震動效果
+        vibrateOnClick();
+
         }
         
         // 格式化為民國年日期
