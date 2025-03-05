@@ -1,5 +1,6 @@
-const CACHE_NAME = 'kid-check-writer-v0.19';
-const urlsToCache = [
+// 在 service-worker.js 文件中添加版本控制
+const CACHE_VERSION = 'v0.23'; // 每次更新網站時更改這個版本號
+const CACHE_NAME = `kid-check-writer-${CACHE_VERSION}`;
   './',
   './index.html',
   './manifest.json',
@@ -57,6 +58,39 @@ self.addEventListener('activate', event => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+});
+
+// 添加定期檢查更新的邏輯
+self.addEventListener('install', event => {
+  self.skipWaiting(); // 強制激活新的 Service Worker
+  
+  // 原有的緩存代碼...
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        console.log('Opened cache');
+        return cache.addAll(urlsToCache);
+      })
+  );
+});
+
+// 確保新的 Service Worker 立即接管
+self.addEventListener('activate', event => {
+  // 立即接管所有客戶端
+  event.waitUntil(clients.claim());
+  
+  // 清理舊版本緩存
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
             return caches.delete(cacheName);
           }
         })
