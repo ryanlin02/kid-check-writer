@@ -17,7 +17,7 @@
     </script>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=400, user-scalable=no, initial-scale=1, maximum-scale=1">
     <title>小朋友開支票</title>
     <style>
         :root {
@@ -33,17 +33,17 @@
         }
 
         html, body {
-            width: 100%;
-            max-width: 400px;
+            width: 100%;           /* 改為100%寬度 */
+            max-width: 400px;      /* 設定最大寬度 */
             margin: 0 auto;
-            position: relative;
+            position: relative; /* 添加这行 */
             overflow-x: hidden;
             -webkit-text-size-adjust: 100%;
-            padding: 0 3px;
+            padding: 0 3px;       /* 增加左右padding */
             background-color: #333333;
             color: var(--text-color);
             font-family: "Microsoft JhengHei", Arial, sans-serif;
-            box-sizing: border-box;
+            box-sizing: border-box; /* 添加這行 */
         }
 
         h1 {
@@ -1125,6 +1125,17 @@
             font-size: 12px;
         }
 
+        .sticky-header.is-sticky {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
     </style>
 </head>
 <body>
@@ -1332,6 +1343,22 @@
                 if (event.data === 'UPDATE_AVAILABLE') {
                     showUpdateModal();
                 }
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const header = document.querySelector('.sticky-header');
+                
+                if (!header) return;
+
+                window.addEventListener('scroll', function() {
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    
+                    if (scrollTop > header.offsetTop) {
+                        header.classList.add('is-sticky');
+                    } else {
+                        header.classList.remove('is-sticky');
+                    }
+                });
             });
     
             // 更新模態框函數
