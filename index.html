@@ -1,2077 +1,2148 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XE5XMQR0Z1"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
 
-    gtag('config', 'G-XE5XMQR0Z1');
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192x192.png">
+    <meta name="theme-color" content="#ff9c33">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js');
+            });
+        }
     </script>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=400, user-scalable=no">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>小朋友開支票</title>
-
-    <!-- PWA meta tags -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#333333">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="開支票">
-    <link rel="apple-touch-icon" href="icon-192x192.png">
-
     <style>
-    :root {
-        --primary-color: #333333;
-        --secondary-color: #4a4a4a;
-        --text-color: #ffffff;
-        --border-color: #555555;
-        --hover-color: #666666;
-        --shadow-color: rgba(0, 0, 0, 0.3);
-        --button-orange: #ff9c33;
-        --button-blue: #33b5e5;
-        --button-grey: #333333;
-    }
+        :root {
+            --primary-color: #333333;
+            --secondary-color: #4a4a4a;
+            --text-color: #ffffff;
+            --border-color: #555555;
+            --hover-color: #666666;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --button-orange: #ff9c33;
+            --button-blue: #33b5e5;
+            --button-grey: #333333;
+        }
 
-    html, body {
-        width: 100%;
-        max-width: 400px;
-        margin: 0 auto;
-        position: relative;
-        overflow-x: hidden;
-        -webkit-text-size-adjust: 100%;
-        padding: 0 3px;
-        background-color: #333333;
-        color: var(--text-color);
-        font-family: "Microsoft JhengHei", Arial, sans-serif;
-        box-sizing: border-box;
-    }
+        html, body {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            position: relative;
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+            padding: 0 3px;
+            background-color: #333333;
+            color: var(--text-color);
+            font-family: "Microsoft JhengHei", Arial, sans-serif;
+            box-sizing: border-box;
+        }
 
-    h1 {
-        color: var(--text-color);
-        font-size: 22px;
-        margin-bottom: 0px;
-        border-bottom: 2px solid var(--button-orange);
-        padding-bottom: 5px;
-        position: relative;
-        transition: all 0.3s ease;
-        text-align: center;
-    }
+        h1 {
+            color: var(--text-color);
+            font-size: 22px;
+            margin-bottom: 0px;
+            border-bottom: 2px solid var(--button-orange);
+            padding-bottom: 5px;
+            position: relative;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
 
-    h1:hover {
-        transform: translateY(-2px);
-        text-shadow: 0 2px 4px rgba(255, 156, 51, 0.3);
-    }
+        h1:hover {
+            transform: translateY(-2px);
+            text-shadow: 0 2px 4px rgba(255, 156, 51, 0.3);
+        }
 
-    h1::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: var(--button-orange);
-        transform: scaleX(0);
-        transform-origin: right;
-        transition: transform 0.6s ease-out;
-    }
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--button-orange);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.6s ease-out;
+        }
 
-    h1:hover::after {
-        transform: scaleX(1);
-        transform-origin: left;
-    }
+        h1:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
 
-    .time-display-wrapper {
-        position: relative;
-        height: auto;
-        margin: 3px 0;
-        z-index: 1000;
-    }
+        .row {
+            margin: 4px 0;
+            display: flex;
+            align-items: center;
+            background: var(--secondary-color);
+            padding: 3px;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            transform-origin: left;
+            will-change: transform;
+        }
 
-    .sticky-header {
-        position: -webkit-sticky !important;
-        position: sticky !important;
-        top: 0;
-        background: var(--secondary-color);
-        padding: 8px;
-        border-radius: 4px;
-        box-shadow: 0 2px 4px var(--shadow-color);
-        animation: fadeIn 0.8s ease-out;
-        transition: all 0.3s ease;
-        z-index: 999;
-        width: calc(100% - 16px);
-        margin: 0 auto;
-    }
+        .row:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 12px var(--shadow-color);
+        }
 
-    #timeDisplay {
-        margin: 3px 0;
-        font-size: 15px;
-        background: var(--secondary-color);
-        color: var(--text-color);
-        padding: 8px;
-        border-radius: 4px;
-        box-shadow: 0 2px 4px var(--shadow-color);
-        animation: fadeIn 0.8s ease-out;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
+        .row:hover::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: 50%;
+            width: 3px;
+            height: 0;
+            background: var(--button-orange);
+            animation: expandHeight 0.3s forwards;
+        }
 
-    #timeDisplay:hover {
-        transform: scale(1.02);
-        box-shadow: 0 6px 12px var(--shadow-color);
-    }
+        @keyframes expandHeight {
+            to {
+                height: 100%;
+                top: 0;
+            }
+        }
 
-    #timeDisplay::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, var(--button-orange), transparent);
-        animation: timelineSlide 3s linear infinite;
-    }
+        .label {
+            width: 120px;
+            margin-right: 15px;
+            text-align: right;
+            font-weight: 600;
+            color: var(--text-color);
+            position: relative;
+            overflow: hidden;
+        }
 
-    @keyframes timelineSlide {
-        0% { left: -100%; }
-        100% { left: 100%; }
-    }
+        input {
+            width: 185px;
+            padding: 5px 12px;
+            margin-right: 10px;
+            background-color: #222222;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
 
-    .time-label {
-        font-weight: bold;
-        margin-right: 10px;
-        color: var(--button-orange);
-    }
+        input:focus {
+            outline: none;
+            border-color: var(--button-orange);
+            box-shadow: 0 0 0 3px rgba(255, 156, 51, 0.2);
+            transform: scale(1.07);
+        }
 
-    .row {
-        margin: 4px 0;
-        display: flex;
-        align-items: center;
-        background: var(--secondary-color);
-        padding: 3px;
-        border-radius: 4px;
-        box-shadow: 0 4px 8px var(--shadow-color);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        position: relative;
-        transform-origin: left;
-        will-change: transform;
-    }
+        button {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 3px 8px;
+            margin: 0 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 16px;
+        }
 
-    .row:hover {
-        transform: translateX(5px);
-        box-shadow: 0 6px 12px var(--shadow-color);
-    }
+        button:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
 
-    .row:hover::before {
-        content: '';
-        position: absolute;
-        left: -5px;
-        top: 50%;
-        width: 3px;
-        height: 0;
-        background: var(--button-orange);
-        animation: expandHeight 0.3s forwards;
-    }
+        button:active {
+            transform: scale(0.95) translateY(1px);
+            transition: transform 0.1s;
+        }
 
-    @keyframes expandHeight {
-        to {
-            height: 100%;
+        .row button {
+            background-color: var(--secondary-color);
+            color: #888888;
+            border: 1px solid #444444;
+            padding: 3px 8px;
+            margin: 0 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            opacity: 0.8;
+        }
+
+        .row button:hover {
+            background-color: #4a4a4a;
+            color: #cccccc;
+            border-color: #555555;
+            opacity: 0.9;
+        }
+
+        .divider-flow {
+            position: relative;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                var(--secondary-color) 0%,
+                var(--button-orange) 50%,
+                var(--secondary-color) 100%);
+            margin: 4px 0;
+            overflow: hidden;
+        }
+
+        .divider-flow::after {
+            content: '';
+            position: absolute;
             top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 156, 51, 0.8),
+                transparent);
+            animation: flowLight 3s ease-in-out infinite;
         }
-    }
 
-    .label {
-        width: 110px;  /* 減少寬度 */
-        margin-right: 10px;  /* 減少右邊距 */
-        text-align: right;
-        font-weight: 600;
-        color: var(--text-color);
-        position: relative;
-        overflow: hidden;
-    }
-
-    input {
-        width: 210px;  /* 略微增加寬度以彌補標籤縮小的空間 */
-        padding: 5px 12px;
-        margin-right: 10px;
-        background-color: #222222;
-        color: var(--text-color);
-        border: 1px solid var(--border-color);
-        border-radius: 4px;
-        font-size: 16px;
-        transition: all 0.3s ease;
-    }
-
-    input:focus {
-        outline: none;
-        border-color: var(--button-orange);
-        box-shadow: 0 0 0 3px rgba(255, 156, 51, 0.2);
-        transform: scale(1.07);
-    }
-
-    .readonly {
-        background-color: #222222;
-        animation: breathe 4s ease-in-out infinite;
-    }
-
-    @keyframes breathe {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.8; }
-    }
-
-    button {
-        background-color: var(--secondary-color);
-        color: var(--text-color);
-        border: 1px solid var(--border-color);
-        padding: 3px 8px;
-        margin: 0 5px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        font-size: 16px;
-    }
-
-    button:hover {
-        background-color: var(--hover-color);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    button:active {
-        transform: scale(0.95) translateY(1px);
-        transition: transform 0.1s;
-    }
-
-    .divider-flow {
-        position: relative;
-        height: 2px;
-        background: linear-gradient(90deg, 
-            var(--secondary-color) 0%,
-            var(--button-orange) 50%,
-            var(--secondary-color) 100%);
-        margin: 4px 0;
-        overflow: hidden;
-    }
-
-    .divider-flow::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg,
-            transparent,
-            rgba(255, 156, 51, 0.8),
-            transparent);
-        animation: flowLight 3s ease-in-out infinite;
-    }
-
-    @keyframes flowLight {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(200%); }
-    }
-
-    .warning-text {
-        color: #ff0000 !important;
-        font-weight: bold !important;
-        animation: pulse 1s infinite, shake 0.5s ease-in-out; 
-        will-change: transform; 
-    }
-
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
-    }
-
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        20%, 60% { transform: translateX(-1px); }
-        40%, 80% { transform: translateX(1px); }
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .input-button-group {
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        margin: 4px 0;
-        padding: 1px;
-        background: var(--secondary-color);
-        box-shadow: 0 4px 8px var(--shadow-color);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .input-button-group .row {
-        background: transparent;
-        box-shadow: none;
-        margin: 2px 0;
-        padding-top: 1px;
-        padding-bottom: 1px;
-    }
-
-    .input-button-group .row:hover {
-        transform: translateX(2px);
-        box-shadow: none;
-    }
-
-    .input-button-group .row:hover::before {
-        display: none;
-    }
-
-    /* 修改 #checkCountButtons 樣式 */
-    #checkCountButtons {
-        margin: 0;
-        display: flex;
-        width: 100%;
-        padding: 8px;
-        box-sizing: border-box;
-        min-height: 32px;
-        justify-content: space-between;
-    }
-
-    #checkCountButtons button {
-        flex: 1;
-        margin: 0 3px;
-        padding: 4px 0;
-        min-width: 0;
-        font-size: 15px;
-    }
-
-    /* 特別處理首尾按鈕 */
-    #checkCountButtons button:first-child {
-        margin-left: 0;
-    }
-
-    #checkCountButtons button:last-child {
-        margin-right: 0;
-    }
-
-    #checkCountButtons button:hover {
-        background-color: rgba(255, 156, 51, 0.15);
-        color: #ffffff;
-        border-color: var(--button-orange);
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(255, 156, 51, 0.2);
-    }
-
-    #checkCountButtons button:active {
-        transform: translateY(1px);
-        background-color: rgba(255, 156, 51, 0.3);
-        box-shadow: 0 0 5px rgba(255, 156, 51, 0.5) inset;
-        transition: all 0.1s ease;
-    }
-
-    .footer-message {
-        background-color: #333333;
-        color: var(--text-color);
-        padding: 15px;
-        text-align: center;
-        margin-top: 15px;
-        border-radius: 4px;
-        transform: scale(1.05);
-        text-shadow: 0 0 10px var(--button-orange);
-        transition: all 0.3s ease;
-        position: relative;
-    }
-
-    .footer-spacing {
-        background-color: #333333;
-        height: 50px;
-        margin-top: 0px;
-    }
-
-    /* Number Input Modal */
-    .modal-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
-        z-index: 2000;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .number-input-modal {
-        background-color: var(--primary-color);
-        border-radius: 12px;
-        width: 95%; /* 從 90% 改為 95%，使模態框更寬 */
-        max-width: 350px; /* 從 300px 改為 350px，增加最大寬度 */
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-        overflow: hidden;
-        animation: modalSlideIn 0.3s ease-out;
-    }
-
-    .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 15px;
-        background-color: var(--secondary-color);
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    .modal-header h3 {
-        margin: 0;
-        color: var(--button-orange);
-        font-size: 16px;
-    }
-
-    .calculator-display {
-        background-color: #222222;
-        color: var(--text-color);
-        font-size: 32px; /* 從 28px 改為 32px */
-        padding: 10px 15px; /* 從 8px 15px 改為 10px 15px */
-        text-align: right;
-        margin: 10px; /* 從 8px 改為 10px */
-        border-radius: 6px; /* 從 5px 改為 6px */
-        border: 1px solid var(--border-color);
-        height: 46px; /* 從 36px 改為 46px */
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        overflow: hidden;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    .calculator-buttons {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: repeat(5, auto);
-        gap: 6px; /* 從 4px 改為 6px */
-        padding: 10px; /* 從 6px 改為 10px */
-    }
-
-    .calculator-buttons button {
-        padding: 10px 0; /* 從 8px 0 改為 10px 0 */
-        font-size: 20px; /* 從 17px 改為 20px */
-        border-radius: 10px; /* 從 8px 改為 10px */
-        background-color: #3a3a3a;
-        color: var(--text-color);
-        border: none;
-        transition: all 0.2s ease;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 48px; /* 從 38px 改為 48px */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .calculator-buttons button:hover {
-        background-color: #464646;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .calculator-buttons button:active {
-        transform: scale(0.95);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    }
-
-    /* 按鈕按下後產生波紋效果 */
-    .calculator-buttons button::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 5px;
-        height: 5px;
-        background: rgba(255, 255, 255, 0.5);
-        opacity: 0;
-        border-radius: 100%;
-        transform: scale(1, 1) translate(-50%, -50%);
-        transform-origin: 50% 50%;
-    }
-
-    .calculator-buttons button:active::after {
-        animation: ripple 0.4s ease-out;
-    }
-
-    @keyframes ripple {
-        0% {
-            transform: scale(0, 0) translate(-50%, -50%);
-            opacity: 0.5;
+        @keyframes flowLight {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(200%); }
         }
-        100% {
-            transform: scale(20, 20) translate(-50%, -50%);
+
+        .time-display-wrapper {
+            position: relative;
+            height: auto;
+            margin: 3px 0;
+            z-index: 1000;
+        }
+
+        .sticky-header {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            top: 0;
+            background: var(--secondary-color);
+            padding: 8px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            animation: fadeIn 0.8s ease-out;
+            transition: all 0.3s ease;
+            z-index: 999;
+            width: calc(100% - 16px);
+            margin: 0 auto;
+        }
+
+        #timeDisplay {
+            margin: 3px 0;
+            font-size: 15px;
+            background: var(--secondary-color);
+            color: var(--text-color);
+            padding: 8px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            animation: fadeIn 0.8s ease-out;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #timeDisplay:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px var(--shadow-color);
+        }
+
+        #timeDisplay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--button-orange), transparent);
+            animation: timelineSlide 3s linear infinite;
+        }
+        
+        @keyframes timelineSlide {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .time-label {
+            font-weight: bold;
+            margin-right: 10px;
+            color: var(--button-orange);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .function-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin: 4px 0;
+            padding: 0;
+            width: 100%; 
+        }
+
+        .function-buttons .button-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 4px;
+            width: 100%;
+        }
+
+        .function-buttons button {
+            background-color: var(--secondary-color);
+            color: #ffffff;
+            border: 1px solid var(--button-orange);
+            border-radius: 6px;
+            padding: 8px 0;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
+            margin: 0;
+        }
+
+        .function-buttons button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 156, 51, 0.1), transparent);
+            z-index: -1;
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .function-buttons button:hover {
+            background-color: var(--button-orange);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .function-buttons button:hover::before {
+            transform: translateX(0);
+        }
+
+        .function-buttons button:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            transition: all 0.1s;
+        }
+
+        .check-list {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            background-color: var(--secondary-color);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        .check-list-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--button-orange);
+            font-size: 18px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(255, 156, 51, 0.3);
+            text-align: center;
+        }
+
+        .check-list-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .check-list-table th {
+            background-color: #3a3a3a;
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #555;
+            color: #fff;
+        }
+
+        .check-list-table td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #444;
+            color: #eee;
+        }
+        
+        .check-list-table td:nth-child(2) {
+            text-align: left;
+            padding-left: 12px;
+        }
+        
+        .check-list-table td:nth-child(3) {
+            text-align: left;
+            padding-left: 5px;
+        }
+
+        .check-list-table tr:hover {
+            background-color: #505050;
+        }
+
+        .deposit-amount-display {
+            display: none; /* 初始不顯示 */
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #444444;
+            border-radius: 4px;
+            font-weight: bold;
+            text-align: center;
+            color: #ffffff;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            font-size: 18px;
+            border-bottom: 2px solid var(--button-orange);
+        }
+
+        /* 數字輸入器覆蓋層 */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .calculator {
+            background-color: var(--primary-color);
+            border-radius: 12px;
+            padding: 15px;
+            width: 90%;
+            max-width: 350px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .calculator-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--button-orange);
+            font-size: 18px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 156, 51, 0.3);
+        }
+
+        .calculator-display {
+            background-color: #222222;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            text-align: right;
+            font-size: 24px;
+            color: #ffffff;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .calculator-result {
+            background-color: #2a2a2a;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px 15px;
+            margin-bottom: 15px;
+            text-align: right;
+            font-size: 18px;
+            color: #bbbbbb;
+            min-height: 24px;
+        }
+
+        .calculator-keys {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .calculator-key {
+            background-color: #3a3a3a;
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            padding: 15px 10px;
+            font-size: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculator-key .digit {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .calculator-key .chinese-digit {
+            font-size: 14px;
+            color: #aaaaaa;
+        }
+
+        .calculator-key:hover {
+            background-color: #464646;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .calculator-key:active {
+            transform: scale(0.95);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .calculator-key::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
             opacity: 0;
+            border-radius: 100%;
+            transform: translate(-50%, -50%);
         }
-    }
-
-    /* 功能鍵樣式 */
-    .calculator-buttons .function {
-        background-color: #4d4d4d;
-        color: #eee;
-        font-weight: bold;
-    }
-
-    /* 運算符號樣式 */
-    .calculator-buttons .operator {
-        background-color: rgba(255, 156, 51, 0.9);
-        color: white;
-        font-weight: bold;
-        box-shadow: 0 2px 6px rgba(255, 156, 51, 0.4);
-    }
-
-    /* 清除鍵樣式 */
-    .calculator-buttons .clear {
-        background-color: rgba(231, 76, 60, 0.9);
-        color: white;
-        font-weight: bold;
-        box-shadow: 0 2px 6px rgba(231, 76, 60, 0.4);
-    }
-
-    /* 等號鍵樣式 */
-    .calculator-buttons .equals {
-        background-color: rgba(52, 152, 219, 0.9);
-        color: white;
-        font-weight: bold;
-        box-shadow: 0 2px 6px rgba(52, 152, 219, 0.4);
-    }
-
-    /* 零鍵佔據兩欄 */
-    .calculator-buttons .zero {
-        grid-column: span 2;
-        background-color: #3a3a3a;
-    }
-
-    /* 提交按鈕佔據兩欄 */
-    .calculator-buttons .submit {
-        grid-column: span 2;
-        background-color: var(--button-orange);
-        color: white;
-        font-weight: bold;
-        box-shadow: 0 2px 6px rgba(255, 156, 51, 0.4);
-    }
-
-    /* 移除模態框底部的確認按鈕 */
-    .modal-footer {
-        display: none;
-    }
-
-    /* Toast message */
-    .toast-message {
-        position: fixed;
-        bottom: 60px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: rgba(51, 181, 229, 0.9);
-        color: white;
-        padding: 10px 20px;
-        border-radius: 5px;
-        z-index: 9999;
-        font-weight: bold;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        opacity: 1;
-        transition: opacity 0.5s ease;
-    }
-
-    .toast-error {
-        background-color: rgba(231, 76, 60, 0.9);
-    }
-
-    /* Date picker styles */
-    .date-picker {
-        background-color: var(--primary-color);
-        border-radius: 16px;
-        width: 90%;
-        max-width: 320px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-        overflow: hidden;
-        animation: modalSlideIn 0.3s ease-out;
-    }
-
-    .date-picker-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 15px;
-        background-color: var(--secondary-color);
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    .date-picker-header h3 {
-        margin: 0;
-        color: var(--button-orange);
-        font-size: 17px;
-        font-weight: bold;
-    }
-
-    .date-picker-controls {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px 15px;
-        background-color: var(--secondary-color);
-        align-items: center;
-    }
-
-    .date-picker-controls button {
-        background-color: rgba(255, 156, 51, 0.1);
-        color: var(--text-color);
-        border: none;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-        font-size: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s ease;
-    }
-
-    .date-picker-controls button:hover {
-        background-color: rgba(255, 156, 51, 0.2);
-        transform: scale(1.1);
-    }
-
-    .date-picker-controls .month-year {
-        color: var(--text-color);
-        font-weight: bold;
-        font-size: 15px;
-    }
-
-    /* 增加滑動互動區域的樣式 */
-    .date-scroll-container {
-        position: relative;
-        overflow: hidden;
-        touch-action: pan-y;
-    }
-
-    .month-slider {
-        transition: transform 0.3s ease;
-        height: 280px; /* 添加固定高度 */
-    }
-
-    /* 月份切換動畫 */
-    @keyframes slideInUp {
-        from { transform: translateY(20px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
-
-    @keyframes slideInDown {
-        from { transform: translateY(-20px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
-
-    .animate-up {
-        animation: slideInUp 0.3s forwards;
-    }
-
-    .animate-down {
-        animation: slideInDown 0.3s forwards;
-    }
-
-    .date-picker-calendar {
-        padding: 10px;
-        position: relative;
-        transition: height 0.3s ease;
-        height: 320px; /* 添加固定高度 */
-    }
-
-    .date-picker-calendar .weekdays .weekend {
-        color: rgba(255, 156, 51, 0.8);
-    }
-
-    .date-picker-calendar .days button.weekend:not(:disabled) {
-        background-color: rgba(82, 82, 82, 0.7);
-    }
-
-    .date-picker-calendar .days button.weekend:hover:not(:disabled) {
-        background-color: rgba(255, 156, 51, 0.3);
-    }
-
-    .date-picker-calendar .weekdays {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        text-align: center;
-        margin-bottom: 8px;
-    }
-
-    .date-picker-calendar .weekdays span {
-        color: var(--button-orange);
-        font-weight: bold;
-        font-size: 14px;
-        padding: 6px 0;
-    }
-
-    .date-picker-calendar .days {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        grid-template-rows: repeat(6, 1fr); /* 固定6行，確保所有月份都能顯示 */
-        gap: 4px;
-        height: 100%;
-    }
-
-    .date-picker-calendar .days button {
-        padding: 8px;
-        background-color: rgba(74, 74, 74, 0.7);
-        border: none;
-        border-radius: 50%;
-        width: 38px;
-        height: 38px;
-        color: var(--text-color);
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto;
-    }
-
-    .date-picker-calendar .days button:hover:not(:disabled) {
-        background-color: rgba(255, 156, 51, 0.3);
-        transform: scale(1.1);
-    }
-
-    .date-picker-calendar .days button.selected {
-        background-color: var(--button-orange);
-        color: white;
-        font-weight: bold;
-        box-shadow: 0 2px 8px rgba(255, 156, 51, 0.5);
-    }
-
-    .date-picker-calendar .days button.today:not(.selected) {
-        border: 2px solid var(--button-orange);
-    }
-
-    .date-picker-calendar .days button:disabled {
-        opacity: 0.3;
-        cursor: not-allowed;
-        background-color: rgba(60, 60, 60, 0.5);
-    }
-
-    .date-picker-footer {
-        padding: 12px 15px;
-        display: flex;
-        justify-content: space-between;
-        background-color: var(--secondary-color);
-        border-top: 1px solid var(--border-color);
-    }
-
-    .date-picker-footer button {
-        padding: 8px 15px;
-        background-color: var(--button-orange);
-        border: none;
-        border-radius: 6px;
-        color: white;
-        font-weight: bold;
-        transition: all 0.2s ease;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    .date-picker-footer button:hover {
-        background-color: #e88a22;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Check date list */
-    .check-date-list {
-        margin: 10px 0;
-    }
-
-    .check-date-list .list-header {
-        display: flex;
-        background-color: var(--secondary-color);
-        padding: 8px 10px;
-        border-radius: 4px 4px 0 0;
-        font-weight: bold;
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    /* 添加以下 CSS 樣式 */
-    .check-date-list .list-header .list-date {
-        padding-left: 80px; /* 從20px增加到40px，使標題更靠右 */
-    }
-
-    .check-date-list .list-item {
-        display: flex;
-        background-color: #444444;
-        padding: 8px 10px;
-        border-bottom: 1px solid var(--border-color);
-        transition: background-color 0.2s ease;
-    }
-
-    .check-date-list .list-item:nth-child(odd) {
-        background-color: #3d3d3d;
-    }
-
-    .check-date-list .list-item:hover {
-        background-color: #505050;
-    }
-
-    .check-date-list .list-number {
-        width: 50px;
-        text-align: center;
-    }
-
-    /* 新增以下樣式 */
-    .check-date-list .hold-amount-row {
-        background-color: #4a4a4a;
-        border-top: none;
-        border-radius: 0 0 8px 8px;
-        margin-top: -1px;
-        padding-top: 0;
-    }
-
-    .check-date-list .date-line {
-        display: flex;
-        align-items: center;
-    }
-
-    .check-date-list .last-item {
-        border-bottom: none;
-        border-radius: 0;
-        margin-bottom: 0;
-    }
-
-    /* 讓列表項有交替色 */
-    .check-date-list .list-item:nth-child(even) {
-        background-color: #424242;
-    }
-
-    /* 修改 .check-date-list .list-date 樣式 */
-    .check-date-list .list-date {
-        flex: 1;
-        text-align: left;  /* 從 center 改為 left */
-        padding-left: 10px; /* 添加左側間距 */
-    }
-
-    /* 美化最後一項 */
-    .check-date-list .last-item {
-        background-color: #4a4a4a;
-        border-radius: 0 0 8px 8px;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-        border-bottom: 2px solid var(--button-orange);
-    }
-
-    /* 美化日期顯示 */
-    .check-date-list .date-content {
-        display: flex;
-        align-items: center;
-        margin-bottom: 4px;
-    }
-
-    /* 美化押票金額顯示 */
-    .check-date-list .hold-amount {
-        background-color: rgba(255, 156, 51, 0.1);
-        padding: 8px;
-        border-radius: 4px;
-        font-weight: bold;
-        display: inline-block;
-        margin-top: 4px;
-        width: calc(100% - 16px); /* 減去左右padding */
-    }
-
-    /* 添加以下 CSS 樣式 */
-    .check-date-list .list-date {
-        display: flex;
-        align-items: center;
-    }
-
-    .check-date-list .list-date .date-part {
-        flex: 1;
-        white-space: nowrap; /* 防止日期換行 */
-        padding-right: 5px; /* 右側加一點內邊距 */
-    }
-
-    .check-date-list .list-date .weekday-part {
-        width: 30px; /* 縮小寬度 */
-        text-align: left;
-        margin-left: -5px; /* 使用負邊距拉近距離 */
-        padding-left: 0;
-        color: rgba(255, 156, 51, 0.9); /* 加入淡橙色以提高辨識度 */
-    }
-
-    .check-date-list .list-remaining {
-        width: 80px;
-        text-align: center;
-    }
-
-    .check-date-list .list-header .list-remaining {
-        font-weight: bold;
-    }
-
-    /* 年度分隔符樣式 */
-        .check-date-list .year-separator {
-        position: relative;
-        height: 1px;
-        background: linear-gradient(90deg, 
-            transparent 0%, 
-            rgba(255, 156, 51, 0.3) 50%, 
-            transparent 100%);
-        margin: 8px 0;
-        text-align: center;
-    }
-
-    .check-date-list .year-separator span {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: rgba(74, 74, 74, 0.9);
-        padding: 1px 8px;
-        font-size: 12px;
-        color: rgba(255, 156, 51, 0.9);
-        border-radius: 8px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        letter-spacing: 1px;
-        font-weight: 500;
-    }
-
-    /* 美化押票金額顯示區塊 */
-    .hold-amount-container {
-        background-color: rgba(255, 156, 51, 0.05);
-        border-radius: 0 0 8px 8px;
-        margin-top: -1px;
-        padding: 10px;
-        border-top: 1px solid rgba(255, 156, 51, 0.2);
-        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    .hold-amount-title {
-        color: var(--button-orange);
-        font-weight: bold;
-        font-size: 15px;
-        margin-bottom: 6px;
-        padding-left: 5px;
-        border-left: 3px solid var(--button-orange);
-    }
-
-    .hold-amount-value {
-        background-color: rgba(255, 156, 51, 0.1);
-        padding: 10px;
-        border-radius: 6px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 6px;
-    }
-
-    .hold-amount-number {
-        font-size: 16px;
-        font-weight: bold;
-    }
-
-    .hold-amount-uppercase {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.9);
-        background-color: rgba(255, 156, 51, 0.2);
-        padding: 8px 10px;
-        border-radius: 6px;
-        width: 100%;
-        margin-top: 6px;
-        text-align: center;
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    }
-
-    .install-prompt {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: var(--button-orange);
-        color: white;
-        padding: 10px 15px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        z-index: 1000;
-        display: none;
-        text-align: center;
-        font-weight: bold;
-        animation: bounce 2s infinite;
-    }
-
-    @keyframes bounce {
-        0%, 100% { transform: translateX(-50%) translateY(0); }
-        50% { transform: translateX(-50%) translateY(-10px); }
-    }
+
+        .calculator-key:active::after {
+            animation: ripple 0.4s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0) translate(-50%, -50%);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20) translate(-50%, -50%);
+                opacity: 0;
+            }
+        }
+
+        .calculator-key.operation {
+            background-color: #4d4d4d;
+        }
+
+        .calculator-key.operation:hover {
+            background-color: #585858;
+        }
+
+        .calculator-key.enter {
+            background-color: rgba(255, 156, 51, 0.9);
+            color: white;
+            grid-column: span 2;
+            font-weight: bold;
+        }
+
+        .calculator-key.enter:hover {
+            background-color: var(--button-orange);
+        }
+
+        .calculator-key.cancel {
+            background-color: rgba(231, 76, 60, 0.9);
+            color: white;
+            grid-column: span 2;
+            font-weight: bold;
+        }
+
+        .calculator-key.cancel:hover {
+            background-color: #e74c3c;
+        }
+
+        /* 日期選擇器覆蓋層 */
+        .date-picker {
+            background-color: var(--primary-color);
+            border-radius: 12px;
+            padding: 15px;
+            width: 90%;
+            max-width: 350px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .date-picker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 156, 51, 0.3);
+        }
+
+        .date-picker-title {
+            text-align: center;
+            font-weight: bold;
+            flex-grow: 1;
+            color: var(--button-orange);
+            font-size: 18px;
+        }
+
+        .date-picker-nav {
+            cursor: pointer;
+            padding: 5px 10px;
+            background: #3a3a3a;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            color: var(--text-color);
+        }
+
+        .date-picker-nav:hover {
+            background-color: #4a4a4a;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .date-picker-calendar {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .date-picker-calendar th {
+            background-color: #3a3a3a;
+            padding: 8px;
+            text-align: center;
+            color: #eee;
+        }
+
+        .date-picker-calendar td {
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 4px;
+            color: #eee;
+            transition: all 0.2s ease;
+        }
+
+        .date-picker-calendar td:hover:not(.disabled) {
+            background-color: #4a4a4a;
+            transform: scale(1.05);
+        }
+
+        .date-picker-calendar td.selected {
+            background-color: var(--button-orange);
+            color: white;
+            font-weight: bold;
+        }
+
+        .date-picker-calendar td.disabled {
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .date-picker-calendar td.today {
+            border: 2px solid var(--button-orange);
+        }
+
+        .date-picker-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .date-picker-button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .date-picker-button.confirm {
+            background-color: var(--button-orange);
+            color: white;
+            flex: 1;
+            margin-left: 10px;
+        }
+
+        .date-picker-button.confirm:hover {
+            background-color: #ff8c13;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .date-picker-button.cancel {
+            background-color: #e74c3c;
+            color: white;
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .date-picker-button.cancel:hover {
+            background-color: #d62c1a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .toast-message {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(51, 181, 229, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 9999;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .toast-error {
+            background-color: rgba(231, 76, 60, 0.9);
+        }
+
+        .footer-message {
+            background-color: #333333;
+            color: var(--text-color);
+            padding: 15px;
+            text-align: center;
+            margin-top: 15px;
+            border-radius: 4px;
+            transform: scale(1.05);
+            text-shadow: 0 0 10px var(--button-orange);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .footer-spacing {
+            background-color: #333333;
+            height: 50px;
+            margin-top: 0px;
+        }
+
+        .footer-message::before {
+            content: '🧾';
+            margin-right: 8px;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .footer-message:hover::before {
+            transform: rotate(360deg);
+        }
+
+        .check-list-table th:nth-child(3) {
+            color: transparent;
+            background-color: #3a3a3a;
+        }
+
+        /* 歷史記錄面板樣式 */
+        .history-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--primary-color);
+            position: sticky;
+            top: 0;
+            z-index: 1001;
+            border-bottom: 2px solid var(--button-orange);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .header-left {
+            flex: 1;
+        }
+
+        .header-right {
+            margin-right: 10px;
+        }
+
+        .history-header h2 {
+            margin: 0;
+            color: var(--button-orange);
+            font-size: 20px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 50%;
+            margin-left: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .close-btn:hover {
+            color: var(--button-orange);
+            transform: scale(1.1);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .history-content {
+            padding: 8px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* 歷史記錄列表 */
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 3px;
+            margin-bottom: 10px;
+        }
+
+        .history-item {
+            background-color: var(--secondary-color);
+            padding: 8px;
+            border-radius: 8px;
+            position: relative;
+            transition: all 0.3s ease;
+            border-left: 3px solid var(--button-orange);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .history-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .history-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding-bottom: 2px;
+        }
+
+        .history-date {
+            font-weight: bold;
+            color: var(--button-orange);
+            font-size: 14px;
+            padding: 2px 0;
+        }
+
+        .history-header-rate {
+            font-weight: bold;
+            color: #ffffff;
+            font-size: 16px;
+            background-color: rgba(255, 156, 51, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .history-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            background-color: rgba(0, 0, 0, 0.15);
+            padding: 6px;
+            border-radius: 4px;
+        }
+
+        .history-detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #aaaaaa;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .history-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 3px;
+        }
+
+        .delete-btn, .detail-btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            min-width: 70px;
+        }
+
+        .delete-btn {
+            background-color: rgba(231, 76, 60, 0.25);
+            color: #ffffff;
+            border: 1px solid rgba(231, 76, 60, 0.5);
+        }
+
+        .delete-btn:hover {
+            background-color: #e74c3c;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 5px rgba(231, 76, 60, 0.4);
+        }
+
+        .delete-btn:active {
+            transform: translateY(1px);
+        }
+
+        .detail-btn {
+            background-color: rgba(51, 181, 229, 0.25);
+            color: #ffffff;
+            border: 1px solid rgba(51, 181, 229, 0.5);
+        }
+
+        .detail-btn:hover {
+            background-color: var(--button-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 5px rgba(51, 181, 229, 0.4);
+        }
+
+        .detail-btn:active {
+            transform: translateY(1px);
+        }
+
+        .no-data {
+            text-align: center;
+            color: #cccccc;
+            font-style: italic;
+            padding: 30px 0;
+            font-size: 16px;
+        }
+
+        /* 全部刪除按鈕 */
+        .delete-all-btn {
+            background: rgba(231, 76, 60, 0.15);
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            font-size: 14px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .delete-all-btn:hover {
+            background-color: #e74c3c;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 5px rgba(231, 76, 60, 0.4);
+        }
+
+        .delete-all-btn:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
+
+        /* 確認模態框樣式 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-container {
+            background-color: var(--primary-color);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 350px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            animation: modalSlideIn 0.3s ease-out;
+            overflow: hidden;
+        }
+
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--secondary-color);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: var(--button-orange);
+            font-size: 18px;
+        }
+
+        .modal-content {
+            padding: 20px 15px;
+            color: var(--text-color);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 10px 15px 15px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--secondary-color);
+        }
+
+        .modal-btn {
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .modal-btn-primary {
+            background-color: var(--button-orange);
+            color: white;
+        }
+
+        .modal-btn-primary:hover {
+            background-color: #e88a22;
+            transform: translateY(-2px);
+        }
+
+        .modal-btn-secondary {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-btn-secondary:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-2px);
+        }
+
+        /* 將這段 CSS 替換掉原來的 .back-to-top 相關樣式 */
+        .back-to-top {
+            position: fixed;
+            bottom: 15px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            background-color: rgba(51, 51, 51, 0.7);
+            border: 1px solid rgba(255, 156, 51, 0.3);
+            color: rgba(255, 156, 51, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            z-index: 99;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .back-to-top:hover {
+            background-color: rgba(74, 74, 74, 0.9);
+            color: var(--button-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-to-top::before {
+            content: '▲';
+            font-size: 12px;
+        }
 
     </style>
 </head>
 <body>
-    <div style="text-align: center;">
-        <h1>小朋友開支票</h1>
-    </div>
+    <h1>小朋友開支票</h1>
     
     <div class="time-display-wrapper">
         <div id="timeDisplay" class="sticky-header">
             <div style="display: flex; justify-content: center; width: 100%;">
                 <span class="time-label">現在時間：</span>
-                <span id="currentTime"></span>
+                <span id="current-date"></span>
             </div>
         </div>
-    </div>
-    
-    <div class="row">
-        <span class="label">總金額</span>
-        <input type="text" id="totalAmount" readonly placeholder="點擊輸入總金額">
-    </div>
-    
-    <div class="row">
-        <span class="label">繳款金額</span>
-        <input type="text" id="paymentAmount" readonly placeholder="點擊輸入繳款金額">
-    </div>
-    
-    <div class="input-button-group">
-        <div class="row">
-            <span class="label">開票張數</span>
-            <input type="text" id="checkCount" readonly placeholder="點擊輸入開票張數">
-        </div>
-        
-        <div id="checkCountButtons">
-            <button onclick="adjustCheckCount(-1)">-1</button>
-            <button onclick="setCheckCount(7)">7</button>
-            <button onclick="setCheckCount(13)">13</button>
-            <button onclick="setCheckCount(19)">19</button>
-            <button onclick="setCheckCount(25)">25</button>
-            <button onclick="adjustCheckCount(1)">+1</button>
-        </div>
-    </div>
-    
-    <div class="row">
-        <span class="label">押票金額</span>
-        <input type="text" id="holdAmount" class="readonly" readonly>
-    </div>
-    
-    <div class="row">
-        <span class="label">開始日期</span>
-        <input type="text" id="startDate" readonly placeholder="點擊選擇開始日期">
-    </div>
-
-    <div class="row">
-        <span class="label">押票日期</span>
-        <input type="text" id="holdDate" class="readonly" readonly>
     </div>
     
     <div class="divider-flow"></div>
     
-    <div class="row" style="justify-content: center;">
-        <span class="label">開票日期列表</span>
+    <div class="row">
+        <span class="label">總金額</span>
+        <input type="text" id="total-amount" readonly onclick="openCalculator('total-amount', '總金額')">
     </div>
     
-    <div id="checkDateList" class="check-date-list">
-        <!-- 動態生成的開票日期列表 -->
+    <div class="row">
+        <span class="label">繳款金額</span>
+        <input type="text" id="payment-amount" readonly onclick="openCalculator('payment-amount', '繳款金額')">
+    </div>
+    
+    <div class="row">
+        <span class="label">開票張數</span>
+        <input type="text" id="check-count" readonly onclick="openCalculator('check-count', '開票張數')">
+    </div>
+    
+    <div class="row">
+        <span class="label">押票金額</span>
+        <input type="text" id="deposit-amount" readonly>
+    </div>
+    
+    <div class="row">
+        <span class="label">開始日期</span>
+        <input type="text" id="start-date" readonly onclick="showDatePicker()">
     </div>
 
-    <div id="installPrompt" class="install-prompt">點擊安裝應用到桌面</div>
+    <!-- 在開始日期欄位後添加的結束日期欄位 -->
+    <div class="row">
+        <span class="label">結束日期</span>
+        <input type="text" id="end-date" readonly>
+    </div>
     
-    <div class="footer-message">開完支票記得要吃碗火雞肉飯唷！</div>
+    <div class="divider-flow"></div>
+    
+    <div class="check-list">
+        <div class="check-list-title">開票日期列表</div>
+        <div id="check-list-content">
+            <!-- 這裡會動態生成開票日期列表 -->
+        </div>
+    </div>
+    
+    <div class="deposit-amount-display" id="deposit-amount-display">
+        <!-- 這裡會顯示押票金額 -->
+    </div>
+    
+    <div class="divider-flow"></div>
+
+    <div class="function-buttons">
+        <div class="button-row">
+            <button onclick="saveCheckData()">保存計算</button>
+            <button onclick="toggleHistoryPanel()">歷史記錄</button>
+        </div>
+    </div>
+    
+    <div class="footer-message">記得先設定金額與開始日期喔！</div>
     
     <div class="footer-spacing"></div>
     
-    <!-- 數字輸入器模態框 -->
-    <div id="numberInputModal" class="modal-overlay">
-        <div class="number-input-modal">
-            <div class="modal-header">
-                <h3 id="inputModalTitle">數字輸入器</h3>
-                <button class="close-btn" onclick="closeModal('numberInputModal')">×</button>
-            </div>
-            <div class="calculator-display" id="calculatorDisplay">0</div>
-            <div class="calculator-buttons">
-                <!-- 第一行：功能鍵 -->
-                <button onclick="calculatorClear()" class="clear">C</button>
-                <button onclick="calculatorBackspace()" class="function">⌫</button>
-                <button onclick="calculatorOperation('/')" class="operator">÷</button>
-                <button onclick="calculatorOperation('*')" class="operator">×</button>
-                
-                <!-- 第二行：數字和減號 -->
-                <button onclick="calculatorInput(7)">7</button>
-                <button onclick="calculatorInput(8)">8</button>
-                <button onclick="calculatorInput(9)">9</button>
-                <button onclick="calculatorOperation('-')" class="operator">−</button>
-                
-                <!-- 第三行：數字和加號 -->
-                <button onclick="calculatorInput(4)">4</button>
-                <button onclick="calculatorInput(5)">5</button>
-                <button onclick="calculatorInput(6)">6</button>
-                <button onclick="calculatorOperation('+')" class="operator">+</button>
-                
-                <!-- 第四行：底部數字和等號 -->
-                <button onclick="calculatorInput(1)">1</button>
-                <button onclick="calculatorInput(2)">2</button>
-                <button onclick="calculatorInput(3)">3</button>
-                <button onclick="calculatorEquals()" class="equals">=</button>
-                
-                <!-- 第五行：零和更寬的等號鍵 -->
-                <button onclick="calculatorInput(0)" class="zero">0</button>
-                <button onclick="submitCalculatorValue()" class="submit">確認輸入</button>
-            </div>
-            <div class="modal-footer">
-                <button class="modal-btn modal-btn-primary" onclick="submitCalculatorValue()">輸入</button>
+    <!-- 數字輸入器覆蓋層 -->
+    <div class="overlay" id="calculator-overlay">
+        <div class="calculator">
+            <div class="calculator-title" id="calculator-title">總金額</div>
+            <div class="calculator-display" id="calculator-display"></div>
+            <div class="calculator-result" id="calculator-result"></div>
+            <div class="calculator-keys">
+                <div class="calculator-key" data-value="7">
+                    <span class="digit">7</span>
+                    <span class="chinese-digit">柒</span>
+                </div>
+                <div class="calculator-key" data-value="8">
+                    <span class="digit">8</span>
+                    <span class="chinese-digit">捌</span>
+                </div>
+                <div class="calculator-key" data-value="9">
+                    <span class="digit">9</span>
+                    <span class="chinese-digit">玖</span>
+                </div>
+                <div class="calculator-key operation" data-value="+">+</div>
+                <div class="calculator-key" data-value="4">
+                    <span class="digit">4</span>
+                    <span class="chinese-digit">肆</span>
+                </div>
+                <div class="calculator-key" data-value="5">
+                    <span class="digit">5</span>
+                    <span class="chinese-digit">伍</span>
+                </div>
+                <div class="calculator-key" data-value="6">
+                    <span class="digit">6</span>
+                    <span class="chinese-digit">陸</span>
+                </div>
+                <div class="calculator-key operation" data-value="-">-</div>
+                <div class="calculator-key" data-value="1">
+                    <span class="digit">1</span>
+                    <span class="chinese-digit">壹</span>
+                </div>
+                <div class="calculator-key" data-value="2">
+                    <span class="digit">2</span>
+                    <span class="chinese-digit">貳</span>
+                </div>
+                <div class="calculator-key" data-value="3">
+                    <span class="digit">3</span>
+                    <span class="chinese-digit">參</span>
+                </div>
+                <div class="calculator-key operation" data-value="*">×</div>
+                <div class="calculator-key" data-value="0">
+                    <span class="digit">0</span>
+                    <span class="chinese-digit">零</span>
+                </div>
+                <div class="calculator-key operation" data-value="C">C</div>
+                <div class="calculator-key operation" data-value="CE">CE</div>
+                <div class="calculator-key operation" data-value="/">/</div>
+                <div class="calculator-key cancel" data-value="cancel">取消</div>
+                <div class="calculator-key enter" data-value="enter">輸入</div>
             </div>
         </div>
     </div>
     
-    <!-- 日期選擇器模態框 -->
-    <div id="datePickerModal" class="modal-overlay">
+    <!-- 日期選擇器覆蓋層 -->
+    <div class="overlay" id="date-picker-overlay">
         <div class="date-picker">
             <div class="date-picker-header">
-                <h3>選擇日期</h3>
-                <button class="close-btn" onclick="closeModal('datePickerModal')">×</button>
+                <div class="date-picker-nav" id="prev-month"><<</div>
+                <div class="date-picker-title" id="date-picker-title">2024年3月</div>
+                <div class="date-picker-nav" id="next-month">>></div>
             </div>
-            <div class="date-picker-controls">
-                <button onclick="prevMonthWithAnimation()">&lt;</button>
-                <span class="month-year" id="currentMonthYear"></span>
-                <button onclick="nextMonthWithAnimation()">&gt;</button>
-            </div>
-            <div class="date-scroll-container">
-                <div class="date-picker-calendar" id="datePickerCalendar">
-                    <div class="weekdays">
-                        <span class="weekend">日</span>
-                        <span>一</span>
-                        <span>二</span>
-                        <span>三</span>
-                        <span>四</span>
-                        <span>五</span>
-                        <span class="weekend">六</span>
-                    </div>
-                    <div class="month-slider" id="monthSlider">
-                        <div class="days" id="calendarDays">
-                            <!-- 動態生成的日期 -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="date-picker-footer">
-                <button class="modal-btn modal-btn-primary" onclick="selectToday()">今天</button>
-                <button class="modal-btn modal-btn-primary" onclick="confirmDate()">確認</button>
+            <table class="date-picker-calendar">
+                <thead>
+                    <tr>
+                        <th>日</th>
+                        <th>一</th>
+                        <th>二</th>
+                        <th>三</th>
+                        <th>四</th>
+                        <th>五</th>
+                        <th>六</th>
+                    </tr>
+                </thead>
+                <tbody id="date-picker-body">
+                    <!-- 這裡會動態生成日曆 -->
+                </tbody>
+            </table>
+            <div class="date-picker-actions">
+                <button class="date-picker-button cancel" id="date-picker-cancel">取消</button>
+                <button class="date-picker-button confirm" id="date-picker-confirm">確認</button>
             </div>
         </div>
     </div>
 
-<script>
-    // 全局變量
-    let currentInputField = null;
-    let calculatorValue = "0";
-    let calculatorOperator = null;
-    let calculatorFirstValue = null;
-    let calculatorWaitingForSecondValue = false;
-    let selectedDate = null;
-    let currentDatePickerDate = new Date();
+    <script>
+        // 初始化變數
+        let totalAmount = 0;
+        let paymentAmount = 0;
+        let checkCount = 0;
+        let depositAmount = 0;
+        let startDate = null;
+        
+        // 輸入器相關變數
+        let currentInput = '';
+        let currentTarget = null;
+        let expressionDisplay = '';
+        let resultValue = 0;
+        
+        // 日期選擇器相關變數
+        let selectedDate = null;
+        let currentViewMonth = new Date();
 
-    // 震動函數
-    function vibrateOnClick() {
-        if (navigator.vibrate) {
-            navigator.vibrate(30);
-        }
-    }
-
-    // 將數字轉換為中文大寫函數 (改進版)
-    function numberToChineseUppercase(num) {
-        if (isNaN(num)) return '';
-        
-        // 移除逗號和空格
-        num = num.toString().replace(/,|\s/g, '');
-        
-        const digits = ['零', '壹', '貳', '參', '肆', '伍', '陸', '柒', '捌', '玖'];
-        const units = ['', '拾', '佰', '仟', '萬', '拾', '佰', '仟', '億', '拾', '佰', '仟', '兆'];
-        
-        // 特別處理0
-        if (parseInt(num) === 0) return '零元整';
-        
-        // 處理整數部分
-        let result = '';
-        let zeroFlag = false;
-        let hasAddedUnit = false;
-        
-        for (let i = 0; i < num.length; i++) {
-            const n = parseInt(num[i]);
-            const unit = units[num.length - 1 - i];
-            
-            if (n === 0) {
-                // 特殊處理：萬、億位的零
-                if ((num.length - 1 - i) === 4 || (num.length - 1 - i) === 8) {
-                    // 判斷該位置之前是否有有效數字
-                    let hasValidDigitBefore = false;
-                    for (let j = 0; j < i; j++) {
-                        if (parseInt(num[j]) !== 0) {
-                            hasValidDigitBefore = true;
-                            break;
+        // 檢查並處理服務工作者更新
+        if ('serviceWorker' in navigator) {
+            let newWorker;
+    
+            navigator.serviceWorker.register('/service-worker.js').then(reg => {
+                // 註冊服務工作者
+                reg.addEventListener('updatefound', () => {
+                    // 偵測到新的服務工作者
+                    newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        // 當新的服務工作者準備就緒
+                        if (newWorker.state === 'installed') {
+                            if (navigator.serviceWorker.controller) {
+                                // 彈出更新提示
+                                showUpdateModal();
+                            }
                         }
-                    }
-                    
-                    if (hasValidDigitBefore && !result.endsWith(unit)) {
-                        result += unit;
-                        hasAddedUnit = true;
-                    }
+                    });
+                });
+            });
+    
+            // 監聽消息事件
+            navigator.serviceWorker.addEventListener('message', (event) => {
+                if (event.data === 'UPDATE_AVAILABLE') {
+                    showUpdateModal();
                 }
-                zeroFlag = true;
-            } else {
-                // 處理非零數字
-                if (zeroFlag && i > 0 && !hasAddedUnit) {
-                    result += '零';
-                }
-                result += digits[n] + unit;
-                zeroFlag = false;
-                hasAddedUnit = false;
-            }
-        }
-        
-        return result + '元整';
-    }
-
-    // 當頁面加載完成
-    document.addEventListener('DOMContentLoaded', function() {
-        // 初始化時間顯示
-        updateTime();
-        setInterval(updateTime, 1000);
-        
-        // 設置輸入框點擊事件
-        document.getElementById('totalAmount').addEventListener('click', function() {
-            openCalculator('totalAmount', '請輸入【總金額】');
-        });
-        
-        document.getElementById('paymentAmount').addEventListener('click', function() {
-            openCalculator('paymentAmount', '請輸入【繳款金額】');
-        });
-        
-        document.getElementById('checkCount').addEventListener('click', function() {
-            openCalculator('checkCount', '請輸入【開票張數】');
-        });
-        
-        document.getElementById('startDate').addEventListener('click', function() {
-            openDatePicker();
-        });
-        
-        // 監聽數值變化，計算押票金額
-        ['totalAmount', 'paymentAmount', 'checkCount'].forEach(function(id) {
-            document.getElementById(id).addEventListener('change', calculateHoldAmount);
-        });
-
-        // 點擊模態框背景關閉模態框
-        document.getElementById('numberInputModal').addEventListener('click', function(event) {
-            if (event.target === this) {
-                closeModal('numberInputModal');
-            }
-        });
-
-        // 點擊模態框背景關閉日期選擇器
-        document.getElementById('datePickerModal').addEventListener('click', function(event) {
-            if (event.target === this) {
-                closeModal('datePickerModal');
-            }
-        });
-
-        // 添加日期選擇器滑動切換月份功能
-        const datePickerCalendar = document.getElementById('datePickerCalendar');
-        let startY = 0;
-        let startTime = 0;
-        let isSwiping = false;
-
-        datePickerCalendar.addEventListener('touchstart', function(e) {
-            startY = e.touches[0].clientY;
-            startTime = Date.now();
-            isSwiping = true;
-        }, { passive: true });
-
-        datePickerCalendar.addEventListener('touchmove', function(e) {
-            if (!isSwiping) return;
-            e.preventDefault();
-        }, { passive: false });
-
-        datePickerCalendar.addEventListener('touchend', function(e) {
-            if (!isSwiping) return;
-            
-            const endY = e.changedTouches[0].clientY;
-            const deltaY = endY - startY;
-            const timeDiff = Date.now() - startTime;
-            
-            // 滑動距離至少20px且時間不超過300ms才算有效滑動
-            if (Math.abs(deltaY) > 20 && timeDiff < 300) {
-                if (deltaY > 0) {
-                    // 下滑，顯示上個月
-                    prevMonthWithAnimation();
-                } else {
-                    // 上滑，顯示下個月
-                    nextMonthWithAnimation();
-                }
-            }
-            
-            isSwiping = false;
-        }, { passive: true });
-    });
+            });
     
-    // 更新時間顯示（民國年）
-    function updateTime() {
-        const now = new Date();
-        const days = ['日', '一', '二', '三', '四', '五', '六'];
-        
-        // 轉換為民國年
-        const rocYear = now.getFullYear() - 1911;
-        const month = now.getMonth() + 1;
-        const date = now.getDate();
-        const day = days[now.getDay()];
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        
-        const timeString = `民國${rocYear}年${month}月${date}日 星期${day} ${hours}:${minutes}:${seconds}`;
-        document.getElementById('currentTime').textContent = timeString;
-    }
-    
-    // 開啟計算機輸入器
-    function openCalculator(inputId, title) {
-        currentInputField = inputId;
-        document.getElementById('inputModalTitle').textContent = title ;
-        document.getElementById('calculatorDisplay').textContent = '0';
-        calculatorValue = "0";
-        calculatorOperator = null;
-        calculatorFirstValue = null;
-        calculatorWaitingForSecondValue = false;
-        
-        document.getElementById('numberInputModal').style.display = 'flex';
-        
-        // 添加震動效果
-        if (navigator.vibrate) {
-            navigator.vibrate(30);
-        }
-    }
-    
-    // 關閉模態框
-    function closeModal(modalId) {
-        document.getElementById(modalId).style.display = 'none';
-
-        // 添加震動效果
-        vibrateOnClick();
-
-    }
-    
-    // 計算機數字輸入
-    function calculatorInput(num) {
-        if (calculatorWaitingForSecondValue) {
-            calculatorValue = num.toString();
-            calculatorWaitingForSecondValue = false;
-        } else {
-            calculatorValue = calculatorValue === '0' ? num.toString() : calculatorValue + num.toString();
-        }
-        document.getElementById('calculatorDisplay').textContent = calculatorValue;
-
-        // 添加震動效果
-        vibrateOnClick();
-
-    }
-    
-    // 計算機清除
-    function calculatorClear() {
-        calculatorValue = '0';
-        calculatorOperator = null;
-        calculatorFirstValue = null;
-        calculatorWaitingForSecondValue = false;
-        document.getElementById('calculatorDisplay').textContent = calculatorValue;
-
-        // 添加震動效果
-        vibrateOnClick();
-        
-    }
-    
-    // 計算機退格
-    function calculatorBackspace() {
-        if (calculatorValue.length > 1) {
-            calculatorValue = calculatorValue.slice(0, -1);
-        } else {
-            calculatorValue = '0';
-        }
-        document.getElementById('calculatorDisplay').textContent = calculatorValue;
-
-        // 添加震動效果
-        vibrateOnClick();
-        
-    }
-    
-    // 計算機小數點
-    function calculatorDecimal() {
-        if (!calculatorValue.includes('.')) {
-            calculatorValue += '.';
-        }
-        document.getElementById('calculatorDisplay').textContent = calculatorValue;
-    }
-    
-    // 計算機百分比
-    function calculatorPercent() {
-        calculatorValue = (parseFloat(calculatorValue) / 100).toString();
-        document.getElementById('calculatorDisplay').textContent = calculatorValue;
-    }
-    
-    // 計算機運算符
-    function calculatorOperation(op) {
-        // 如果已有第一個值和運算符，先進行計算
-        if (calculatorFirstValue !== null && calculatorOperator !== null && !calculatorWaitingForSecondValue) {
-            calculatorEquals();
-
-        // 添加震動效果
-        vibrateOnClick();
-        
-        }
-        
-        calculatorFirstValue = parseFloat(calculatorValue);
-        calculatorOperator = op;
-        calculatorWaitingForSecondValue = true;
-    }
-    
-    // 計算機等號
-    function calculatorEquals() {
-        if (calculatorOperator === null) return;
-        
-        const secondValue = parseFloat(calculatorValue);
-        let result;
-        
-        switch (calculatorOperator) {
-            case '+':
-                result = calculatorFirstValue + secondValue;
-                break;
-            case '-':
-                result = calculatorFirstValue - secondValue;
-                break;
-            case '*':
-                result = calculatorFirstValue * secondValue;
-                break;
-            case '/':
-                result = calculatorFirstValue / secondValue;
-                break;
-            default:
-                return;
-        }
-        
-        calculatorValue = result.toString();
-        document.getElementById('calculatorDisplay').textContent = calculatorValue;
-        calculatorOperator = null;
-        calculatorFirstValue = result;
-        calculatorWaitingForSecondValue = true;
-
-        // 添加震動效果
-        vibrateOnClick();
-        
-    }
-    
-    // 提交計算機值
-    function submitCalculatorValue() {
-        if (!currentInputField) return;
-        
-        let value = parseFloat(calculatorValue);
-        if (isNaN(value)) value = 0;
-        
-        // 根據不同輸入框進行驗證
-        switch (currentInputField) {
-            case 'totalAmount':
-                // 驗證總金額（不超過9位數的正整數）
-                value = Math.floor(value);
-                if (value > 999999999) {
-                    showToast('錯誤：總金額不能超過9位數', true);
-                    return;
-                }
-                break;
-                
-            case 'paymentAmount':
-                // 驗證繳款金額（不超過7位數的正整數）
-                value = Math.floor(value);
-                if (value > 9999999) {
-                    showToast('錯誤：繳款金額不能超過7位數', true);
-                    return;
-                }
-                break;
-                
-            case 'checkCount':
-                // 驗證開票張數（不超過2位數的正整數）
-                value = Math.floor(value);
-                if (value > 99) {
-                    showToast('錯誤：開票張數不能超過2位數', true);
-                    return;
-                }
-                break;
-        }
-        
-        // 格式化顯示並更新輸入框
-        document.getElementById(currentInputField).value = value.toLocaleString();
-        
-        // 觸發 change 事件以更新其他相關計算
-        const event = new Event('change');
-        document.getElementById(currentInputField).dispatchEvent(event);
-        
-        // 關閉模態框
-        closeModal('numberInputModal');
-        
-        // 添加震動效果
-        if (navigator.vibrate) {
-            navigator.vibrate(30);
-        }
-    }
-    
-    // 顯示提示訊息
-    function showToast(message, isError = false) {
-        // 移除現有的 toast
-        const existingToast = document.querySelector('.toast-message');
-        if (existingToast) {
-            document.body.removeChild(existingToast);
-        }
-        
-        // 創建新的 toast
-        const toast = document.createElement('div');
-        toast.className = 'toast-message';
-        if (isError) {
-            toast.classList.add('toast-error');
-        }
-        toast.textContent = message;
-        document.body.appendChild(toast);
-        
-        // 2秒後自動消失
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            setTimeout(() => {
-                if (document.body.contains(toast)) {
-                    document.body.removeChild(toast);
-                }
-            }, 500);
-        }, 2000);
-    }
-    
-    // 計算押票金額
-    function calculateHoldAmount() {
-        const totalAmountEl = document.getElementById('totalAmount');
-        const paymentAmountEl = document.getElementById('paymentAmount');
-        const checkCountEl = document.getElementById('checkCount');
-        const holdAmountEl = document.getElementById('holdAmount');
-        
-        // 檢查是否所有必要欄位都已填寫
-        if (!totalAmountEl.value || !paymentAmountEl.value || !checkCountEl.value) {
-            holdAmountEl.value = '';
-            return;
-        }
-        
-        // 解析數值（移除千位分隔符）
-        const totalAmount = parseInt(totalAmountEl.value.replace(/,/g, ''));
-        const paymentAmount = parseInt(paymentAmountEl.value.replace(/,/g, ''));
-        const checkCount = parseInt(checkCountEl.value.replace(/,/g, ''));
-        
-        // 計算押票金額
-        const holdAmount = totalAmount - (paymentAmount * checkCount);
-        
-        // 更新押票金額
-        if (holdAmount <= 0) {
-            holdAmountEl.value = '0';
-            holdAmountEl.classList.add('warning-text');
-            showToast('錯誤：押票金額必須大於零', true);
-        } else {
-            holdAmountEl.value = holdAmount.toLocaleString();
-            holdAmountEl.classList.remove('warning-text');
-        }
-        
-        // 如果開始日期已設置，更新開票日期列表
-        if (document.getElementById('startDate').value) {
-            updateCheckDateList();
-        }
-    }
-    
-    // 調整開票張數
-    function adjustCheckCount(delta) {
-        const checkCountEl = document.getElementById('checkCount');
-        if (!checkCountEl.value) return;
-        
-        let count = parseInt(checkCountEl.value.replace(/,/g, '')) + delta;
-        if (count < 1) count = 1;
-        if (count > 99) count = 99;
-        
-        checkCountEl.value = count.toLocaleString();
-        
-        // 觸發 change 事件
-        const event = new Event('change');
-        checkCountEl.dispatchEvent(event);
-        
-        // 添加震動效果
-        if (navigator.vibrate) {
-            navigator.vibrate(30);
-        }
-    }
-    
-    // 設置開票張數
-    function setCheckCount(count) {
-        const checkCountEl = document.getElementById('checkCount');
-        checkCountEl.value = count.toLocaleString();
-        
-        // 觸發 change 事件
-        const event = new Event('change');
-        checkCountEl.dispatchEvent(event);
-        
-        // 添加震動效果
-        if (navigator.vibrate) {
-            navigator.vibrate(30);
-        }
-    }
-    
-    // 打開日期選擇器
-    function openDatePicker() {
-        // 初始化日期選擇器的當前日期
-        currentDatePickerDate = new Date();
-        selectedDate = null;
-        
-        // 顯示日期選擇器
-        updateDatePickerCalendar();
-        document.getElementById('datePickerModal').style.display = 'flex';
-        
-        // 添加震動效果
-        if (navigator.vibrate) {
-            navigator.vibrate(30);
-        }
-    }
-    
-    // 更新日期選擇器日曆
-    function updateDatePickerCalendar() {
-        const year = currentDatePickerDate.getFullYear();
-        const month = currentDatePickerDate.getMonth();
-        
-        // 更新標題
-        document.getElementById('currentMonthYear').textContent = 
-            `民國${year - 1911}年${month + 1}月`;
-        
-        // 獲取當月的第一天是星期幾
-        const firstDay = new Date(year, month, 1).getDay();
-        
-        // 獲取當月的天數
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        
-        // 獲取今天的日期
-        const today = new Date();
-        
-        // 獲取上個月的天數
-        const prevMonth = month === 0 ? 11 : month - 1;
-        const prevYear = month === 0 ? year - 1 : year;
-        const daysInPrevMonth = new Date(prevYear, prevMonth + 1, 0).getDate();
-        
-        // 生成日曆
-        let calendarHTML = '';
-        
-        // 填充上個月的尾部日期（顯示前一週）
-        for (let i = 0; i < firstDay; i++) {
-            const prevMonthDay = daysInPrevMonth - firstDay + i + 1;
-            const isWeekend = i === 0 || i === 6; // 週日或週六
-            
-            calendarHTML += `<button disabled class="${isWeekend ? 'weekend' : ''}" style="opacity: 0.2">
-                            ${prevMonthDay}
-                            </button>`;
-        }
-        
-        // 填充當月日期
-        for (let day = 1; day <= daysInMonth; day++) {
-            const date = new Date(year, month, day);
-            const dayOfWeek = date.getDay();
-            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6; // 週日或週六
-            
-            const isToday = date.getDate() === today.getDate() && 
-                        date.getMonth() === today.getMonth() && 
-                        date.getFullYear() === today.getFullYear();
-            
-            const isSelected = selectedDate !== null && 
-                            date.getDate() === selectedDate.getDate() && 
-                            date.getMonth() === selectedDate.getMonth() && 
-                            date.getFullYear() === selectedDate.getFullYear();
-            
-            // 早於今天的日期不能選擇
-            const isPast = date < new Date(today.setHours(0, 0, 0, 0));
-            
-            calendarHTML += `<button 
-                            ${isPast ? 'disabled' : ''} 
-                            class="${isSelected ? 'selected' : ''} ${isToday ? 'today' : ''} ${isWeekend ? 'weekend' : ''}"
-                            onclick="selectDate(${year}, ${month}, ${day})">
-                            ${day}
-                            </button>`;
-        }
-        
-        // 填充下個月的開頭日期（顯示到下一週）
-        const cellsUsed = firstDay + daysInMonth;
-        const nextDays = 42 - cellsUsed; // 總是確保總格子數為42(7x6)
-        for (let i = 1; i <= nextDays; i++) {
-            const dayOfWeek = (firstDay + daysInMonth + i - 1) % 7;
-            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6; // 週日或週六
-            
-            calendarHTML += `<button disabled class="${isWeekend ? 'weekend' : ''}" style="opacity: 0.2">
-                            ${i}
-                            </button>`;
-        }
-        
-        document.getElementById('calendarDays').innerHTML = calendarHTML;
-    }
-    
-    // 選擇日期
-    function selectDate(year, month, day) {
-        selectedDate = new Date(year, month, day);
-        updateDatePickerCalendar();
-
-        // 添加震動效果
-        vibrateOnClick();
-        
-    }
-    
-    // 選擇今天
-    function selectToday() {
-        const today = new Date();
-        currentDatePickerDate = today;
-        selectedDate = today;
-        updateDatePickerCalendar();
-
-        // 添加震動效果
-        vibrateOnClick();
-        
-    }
-    
-    // 上個月
-    function prevMonth() {
-        currentDatePickerDate.setMonth(currentDatePickerDate.getMonth() - 1);
-        updateDatePickerCalendar();
-
-        // 添加震動效果
-        vibrateOnClick();
-        
-    }
-
-    // 下個月
-    function nextMonth() {
-        currentDatePickerDate.setMonth(currentDatePickerDate.getMonth() + 1);
-        updateDatePickerCalendar();
-
-        // 添加震動效果
-        vibrateOnClick();
-        
-    }
-
-    // 帶動畫效果的上個月函數
-    function prevMonthWithAnimation() {
-        const monthSlider = document.getElementById('monthSlider');
-        monthSlider.classList.add('animate-down');
-        
-        setTimeout(() => {
-            prevMonth();
-            monthSlider.classList.remove('animate-down');
-        }, 150);
-    }
-
-    // 帶動畫效果的下個月函數
-    function nextMonthWithAnimation() {
-        const monthSlider = document.getElementById('monthSlider');
-        monthSlider.classList.add('animate-up');
-        
-        setTimeout(() => {
-            nextMonth();
-            monthSlider.classList.remove('animate-up');
-        }, 150);
-    }
-    
-    // 確認日期選擇
-    function confirmDate() {
-        if (!selectedDate) {
-            showToast('請選擇一個日期');
-            return;
-
-        // 添加震動效果
-        vibrateOnClick();
-
-        }
-        
-        // 格式化為民國年日期
-        const rocYear = selectedDate.getFullYear() - 1911;
-        const month = selectedDate.getMonth() + 1;
-        const day = selectedDate.getDate();
-        
-        // 更新開始日期
-        document.getElementById('startDate').value = `${rocYear}年${month}月${day}日 ${getWeekDay(selectedDate)}`;
-        
-        // 關閉日期選擇器
-        closeModal('datePickerModal');
-        
-        // 更新開票日期列表
-        updateCheckDateList();
-        
-        // 添加震動效果
-        if (navigator.vibrate) {
-            navigator.vibrate(30);
-        }
-    }
-
-    // 獲取星期幾的簡短表示
-    // 修改 getWeekDay 函數
-    function getWeekDay(date) {
-        const days = ['日', '一', '二', '三', '四', '五', '六'];
-        return `(${days[date.getDay()]})`;  // 在星期數字兩側加括號
-    }
-    
-    // 更新開票日期列表
-    function updateCheckDateList() {
-        const checkCountEl = document.getElementById('checkCount');
-        const startDateEl = document.getElementById('startDate');
-        const checkDateListEl = document.getElementById('checkDateList');
-        
-        // 如果缺少開票張數或開始日期，則清空列表
-        if (!checkCountEl.value || !startDateEl.value) {
-            checkDateListEl.innerHTML = '';
-            return;
-        }
-        
-        // 解析開票張數和開始日期
-        const checkCount = parseInt(checkCountEl.value.replace(/,/g, ''));
-        const startDateMatch = startDateEl.value.match(/(\d+)年(\d+)月(\d+)日/);
-        
-        if (!startDateMatch) {
-            checkDateListEl.innerHTML = '';
-            return;
-        }
-        
-        const rocYear = parseInt(startDateMatch[1]);
-        const startMonth = parseInt(startDateMatch[2]);
-        const startDay = parseInt(startDateMatch[3]);
-        const startYear = rocYear + 1911;
-        
-        // 創建開票日期列表 HTML
-        // 在 updateCheckDateList 函數中
-        let html = `
-            <div class="list-header">
-                <div class="list-number">編號</div>
-                <div class="list-date">日期</div>
-                <div class="list-remaining">剩餘張數</div>
-            </div>
-        `;
-
-        /* 在循環開始前添加變量 */
-        let previousYear = null;
-        
-        for (let i = 0; i < checkCount; i++) {
-            // 計算當前票據的日期：初始日期加上i個月
-            let currentDate = new Date(startYear, startMonth - 1 + i, startDay);
-
-            // 獲取當月的天數
-            const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-
-            // 如果日期超過了當月的天數，則設為當月的最後一天
-            if (currentDate.getDate() > daysInMonth) {
-                currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), daysInMonth);
-            }
-            
-            // 格式化為民國年日期
-            const currentRocYear = currentDate.getFullYear() - 1911;
-            const currentMonth = currentDate.getMonth() + 1;
-            const currentDay = currentDate.getDate();
-            const weekDay = getWeekDay(currentDate);
-
-            /* 在循環內部添加跨年度檢測 */
-            // 檢查是否與前一行跨年度
-            const isYearChange = previousYear !== null && currentRocYear !== previousYear;
-            previousYear = currentRocYear;
-
-            /* 生成列表項時添加年度分隔符 */
-            // 如果是跨年度且不是第一行，添加年度分隔符
-            if (isYearChange) {
-                html += `<div class="year-separator"><span>${currentRocYear}年</span></div>`;
-            }
-
-            // 計算剩餘張數
-            const remainingCount = checkCount - i;
-            
-            // 檢查是否為最後一個項目
-            if (i === checkCount - 1) {
-                // 為最後一項添加押票金額
-                const holdAmount = document.getElementById('holdAmount').value;
-                const holdAmountUppercase = numberToChineseUppercase(holdAmount);
-                html += `
-                    <div class="list-item last-item">
-                        <div class="list-number">${i + 1}</div>
-                        <div class="list-date">
-                            <div class="date-line">
-                                <span class="date-part">${currentRocYear}年${currentMonth}月${currentDay}日</span>
-                                <span class="weekday-part">${weekDay}</span>
+            // 更新模態框函數
+            function showUpdateModal() {
+                // 創建更新提示的模態框
+                const updateModal = document.createElement('div');
+                updateModal.innerHTML = `
+                    <div class="modal-overlay" id="updateModal" style="
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0,0,0,0.7);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 9999;
+                    ">
+                        <div style="
+                            background: #4a4a4a;
+                            padding: 20px;
+                            border-radius: 10px;
+                            text-align: center;
+                            color: white;
+                            max-width: 300px;
+                        ">
+                            <h2 style="color: #ff9c33;">應用程式有更新</h2>
+                            <p>檢測到新版本，是否立即更新？</p>
+                            <div style="display: flex; justify-content: space-around; margin-top: 20px;">
+                                <button id="updateNow" style="
+                                    background-color: #ff9c33;
+                                    color: white;
+                                    border: none;
+                                    padding: 10px 20px;
+                                    border-radius: 5px;
+                                ">立即更新</button>
+                                <button id="updateLater" style="
+                                    background-color: #333;
+                                    color: white;
+                                    border: none;
+                                    padding: 10px 20px;
+                                    border-radius: 5px;
+                                ">稍後再說</button>
                             </div>
                         </div>
-                        <div class="list-remaining">${remainingCount}張</div>
-                    </div>
-                    <div class="hold-amount-wrapper">
-                        <div class="hold-amount-header">
-                            <div class="hold-amount-title">押票金額明細</div>
-                            <div style="font-size: 12px; color: #aaa;">${new Date().toLocaleDateString('zh-TW')}</div>
-                        </div>
-                        <div class="hold-amount-value">
-                            <span class="amount-number">${holdAmount} 元</span>
-                            <span style="color: #aaa; font-size: 12px;">最終款項</span>
-                        </div>
-                        <div class="amount-uppercase">${holdAmountUppercase}</div>
                     </div>
                 `;
-            }
-            else {
-                // 添加到列表項中
-                html += `
-                    <div class="list-item">
-                        <div class="list-number">${i + 1}</div>
-                        <div class="list-date">
-                            <span class="date-part">${currentRocYear}年${currentMonth}月${currentDay}日</span>
-                            <span class="weekday-part">${weekDay}</span>
-                        </div>
-                        <div class="list-remaining">${remainingCount}張</div>
-                    </div>
-                `;
+                document.body.appendChild(updateModal);
+    
+                // 立即更新按鈕
+                document.getElementById('updateNow').addEventListener('click', () => {
+                    newWorker.postMessage('SKIP_WAITING');
+                    window.location.reload();
+                });
+    
+                // 稍後再說按鈕
+                document.getElementById('updateLater').addEventListener('click', () => {
+                    updateModal.remove();
+                });
             }
         }
         
-        checkDateListEl.innerHTML = html;
-
-        // 在 updateCheckDateList 函數末尾添加以下代碼
-        // 更新押票日期欄位
-        if (checkCount > 0) {
-            const lastIndex = checkCount - 1;
-            let lastDate = new Date(startYear, startMonth - 1 + lastIndex, startDay);
-            
-            // 檢查日期是否有效（處理月份天數問題）
-            const daysInLastMonth = new Date(lastDate.getFullYear(), lastDate.getMonth() + 1, 0).getDate();
-            if (lastDate.getDate() > daysInLastMonth) {
-                lastDate = new Date(lastDate.getFullYear(), lastDate.getMonth(), daysInLastMonth);
+        // 添加震動函數
+        function vibrate() {
+            if (navigator.vibrate) {
+                navigator.vibrate(30); // 震動30毫秒
             }
-            
-            const lastRocYear = lastDate.getFullYear() - 1911;
-            const lastMonth = lastDate.getMonth() + 1;
-            const lastDay = lastDate.getDate();
-            const lastWeekDay = getWeekDay(lastDate);
-            
-            document.getElementById('holdDate').value = `${lastRocYear}年${lastMonth}月${lastDay}日 ${lastWeekDay}`;
         }
-    }
-</script>
-
-<!-- 註冊 Service Worker -->
-<script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./service-worker.js')
-          .then(registration => {
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-          })
-          .catch(err => {
-            console.log('ServiceWorker registration failed: ', err);
-          });
-      });
-    }
-
-    // 安裝提示
-    let deferredPrompt;
-    const installPrompt = document.getElementById('installPrompt');
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-        // 阻止 Chrome 67 及更早版本自動顯示安裝提示
-        e.preventDefault();
-        // 儲存事件以便稍後觸發
-        deferredPrompt = e;
-        // 更新 UI 提示用戶可以安裝 PWA
-        installPrompt.style.display = 'block';
-    });
-
-    installPrompt.addEventListener('click', () => {
-        // 隱藏安裝提示
-        installPrompt.style.display = 'none';
-        // 顯示安裝提示
-        deferredPrompt.prompt();
-        // 等待用戶回應提示
-        deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-            console.log('用戶接受安裝');
+        
+        // 初始化當前時間（民國年）
+        function updateCurrentDate() {
+            const now = new Date();
+            const rocYear = now.getFullYear() - 1911;
+            const month = now.getMonth() + 1;
+            const date = now.getDate();
+            const days = ['日', '一', '二', '三', '四', '五', '六'];
+            const day = days[now.getDay()];
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            const timeString = `${rocYear}年${month}月${date}日 星期${day} ${hours}:${minutes}:${seconds}`;
+            document.getElementById('current-date').textContent = timeString;
+        }
+        
+        // 數字格式化函數（加入千分位符號）
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        // 格式化日期為民國年月日
+        function formatDateToROC(date) {
+            const rocYear = date.getFullYear() - 1911;
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            return `${rocYear}年${month}月${day}日`;
+        }
+        
+        // 取得星期幾（中文格式）
+        function getChineseWeekday(date) {
+            const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+            return `（${weekdays[date.getDay()]}）`;
+        }
+        
+        // 計算押票金額
+        function calculateDepositAmount() {
+            if (totalAmount && paymentAmount && checkCount) {
+                depositAmount = totalAmount - (paymentAmount * checkCount);
+                
+                if (depositAmount <= 0) {
+                    document.getElementById('deposit-amount').value = '';
+                    document.getElementById('deposit-amount-display').textContent = '';
+                    showToast('錯誤：押票金額必須大於零', true);
+                    return;
+                }
+                
+                document.getElementById('deposit-amount').value = formatNumber(depositAmount);
+                document.getElementById('deposit-amount-display').textContent = `押票金額：${formatNumber(depositAmount)}`;
             } else {
-            console.log('用戶拒絕安裝');
+                document.getElementById('deposit-amount').value = '';
+                document.getElementById('deposit-amount-display').textContent = '';
             }
-            deferredPrompt = null;
-        });
-    });
-
-    window.addEventListener('appinstalled', () => {
-        // 隱藏安裝提示
-        installPrompt.style.display = 'none';
-        // 清除提示變數
-        deferredPrompt = null;
-        // 記錄安裝事件
-        console.log('PWA 已成功安裝');
-    });
-
-    // 添加這段代碼到現有 Service Worker 註冊之後
-    if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./service-worker.js')
-        .then(registration => {
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }
+        
+        // 生成開票日期列表
+        // 生成開票日期列表
+        function generateCheckList() {
+            if (!checkCount || !startDate) {
+                document.getElementById('check-list-content').innerHTML = '';
+                document.getElementById('deposit-amount-display').style.display = 'none'; // 隱藏押票金額
+                return;
+            }
             
-            // 檢查更新
-            setInterval(() => {
-            registration.update();
-            }, 60 * 60 * 1000); // 每小時檢查一次更新
+            let html = '<table class="check-list-table">';
+            html += '<thead><tr><th>流水號</th><th>日期</th><th>星期</th><th>剩餘張數</th></tr></thead>';
+            html += '<tbody>';
             
-            // 監聽更新
-            registration.addEventListener('updatefound', () => {
-            const newWorker = registration.installing;
+            const originalDay = startDate.getDate(); // 获取开始日期的日
             
-            newWorker.addEventListener('statechange', () => {
-                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                // 找到更新，通知用戶
-                showUpdateNotification();
+            for (let i = 0; i < checkCount; i++) {
+                // 创建新的日期对象，避免修改原始日期
+                let checkDate = new Date(startDate);
+                
+                // 调整到相应月份
+                if (i > 0) {
+                    // 先设置为下一个月的1号
+                    checkDate.setMonth(checkDate.getMonth() + i, 1);
+                    
+                    // 计算该月的最后一天
+                    const lastDayOfMonth = new Date(checkDate.getFullYear(), checkDate.getMonth() + 1, 0).getDate();
+                    
+                    // 设置为原始日期的日或该月的最后一天（取较小值）
+                    const dayToSet = Math.min(originalDay, lastDayOfMonth);
+                    checkDate.setDate(dayToSet);
+                }
+                
+                const formattedDate = formatDateToROC(checkDate);
+                const weekday = getChineseWeekday(checkDate);
+                const remainingChecks = checkCount - i;
+                
+                html += `<tr>
+                    <td>${i + 1}</td>
+                    <td>${formattedDate}</td>
+                    <td>${weekday}</td>
+                    <td>${remainingChecks}</td>
+                </tr>`;
+            }
+            
+            html += '</tbody></table>';
+            document.getElementById('check-list-content').innerHTML = html;
+            
+            // 顯示押票金額
+            if (depositAmount > 0) {
+                document.getElementById('deposit-amount-display').style.display = 'block';
+            } else {
+                document.getElementById('deposit-amount-display').style.display = 'none';
+            }
+            
+            // 更新結束日期
+            updateEndDateDisplay();
+        }
+        
+        // 打开计算器
+        function openCalculator(targetId, title) {
+            vibrate();
+            currentTarget = document.getElementById(targetId);
+            document.getElementById('calculator-title').textContent = title;
+            
+            // 获取当前输入框的值（如果有）
+            if (currentTarget.value) {
+                expressionDisplay = currentTarget.value.replace(/,/g, '');
+                resultValue = parseFloat(expressionDisplay);
+            } else {
+                expressionDisplay = '';
+                resultValue = 0;
+            }
+            
+            document.getElementById('calculator-display').textContent = expressionDisplay;
+            document.getElementById('calculator-result').textContent = resultValue ? formatNumber(resultValue) : '';
+            
+            document.getElementById('calculator-overlay').style.display = 'flex';
+        }
+        
+        // 数字输入器按键点击处理
+        function setupCalculator() {
+            const calculatorKeys = document.querySelectorAll('.calculator-key');
+            calculatorKeys.forEach(key => {
+                key.addEventListener('click', function() {
+                    vibrate();
+                    const value = this.getAttribute('data-value');
+                    
+                    switch (value) {
+                        case 'enter':
+                            if (resultValue || resultValue === 0) {
+                                // 验证输入值
+                                const targetId = currentTarget.id;
+                                let isValid = true;
+                                
+                                if (targetId === 'total-amount' && resultValue > 999999999) {
+                                    showToast('錯誤：總金額不能超過9位數', true);
+                                    isValid = false;
+                                } else if (targetId === 'payment-amount' && resultValue > 9999999) {
+                                    showToast('錯誤：繳款金額不能超過7位數', true);
+                                    isValid = false;
+                                } else if (targetId === 'check-count' && resultValue > 99) {
+                                    showToast('錯誤：開票張數不能超過2位數', true);
+                                    isValid = false;
+                                }
+                                
+                                if (!isValid) return;
+                                
+                                // 更新输入框值
+                                if (targetId === 'total-amount') {
+                                    totalAmount = Math.round(resultValue);
+                                    currentTarget.value = formatNumber(totalAmount);
+                                } else if (targetId === 'payment-amount') {
+                                    paymentAmount = Math.round(resultValue);
+                                    currentTarget.value = formatNumber(paymentAmount);
+                                } else if (targetId === 'check-count') {
+                                    checkCount = Math.round(resultValue);
+                                    currentTarget.value = formatNumber(checkCount);
+                                }
+                                
+                                calculateDepositAmount();
+                                generateCheckList();
+                                
+                                document.getElementById('calculator-overlay').style.display = 'none';
+                            }
+                            break;
+                            
+                        case 'cancel':
+                            document.getElementById('calculator-overlay').style.display = 'none';
+                            break;
+                            
+                        case 'C':
+                            expressionDisplay = '';
+                            resultValue = 0;
+                            document.getElementById('calculator-display').textContent = '';
+                            document.getElementById('calculator-result').textContent = '';
+                            break;
+                            
+                        case 'CE':
+                            expressionDisplay = expressionDisplay.slice(0, -1);
+                            document.getElementById('calculator-display').textContent = expressionDisplay;
+                            
+                            if (expressionDisplay) {
+                                try {
+                                    resultValue = Math.floor(eval(expressionDisplay));
+                                    document.getElementById('calculator-result').textContent = formatNumber(resultValue);
+                                } catch (e) {
+                                    document.getElementById('calculator-result').textContent = '錯誤';
+                                    resultValue = 0;
+                                }
+                            } else {
+                                resultValue = 0;
+                                document.getElementById('calculator-result').textContent = '';
+                            }
+                            break;
+                            
+                        default:
+                            expressionDisplay += value;
+                            document.getElementById('calculator-display').textContent = expressionDisplay;
+                            
+                            try {
+                                resultValue = Math.floor(eval(expressionDisplay));
+                                document.getElementById('calculator-result').textContent = formatNumber(resultValue);
+                            } catch (e) {
+                                document.getElementById('calculator-result').textContent = '錯誤';
+                                resultValue = 0;
+                            }
+                            break;
+                    }
+                });
+            });
+        }
+        
+        // 清除字段
+        function clearField(fieldId) {
+            vibrate();
+            const element = document.getElementById(fieldId);
+            element.value = '';
+            
+            if (fieldId === 'total-amount') {
+                totalAmount = 0;
+            } else if (fieldId === 'payment-amount') {
+                paymentAmount = 0;
+            } else if (fieldId === 'check-count') {
+                checkCount = 0;
+            }
+            
+            calculateDepositAmount();
+            if (fieldId === 'check-count') {
+                generateCheckList();
+            }
+        }
+        
+        // 清除所有字段
+        function clearAllFields() {
+            vibrate();
+            document.getElementById('total-amount').value = '';
+            document.getElementById('payment-amount').value = '';
+            document.getElementById('check-count').value = '';
+            document.getElementById('deposit-amount').value = '';
+            document.getElementById('start-date').value = '';
+            document.getElementById('deposit-amount-display').textContent = '';
+            document.getElementById('check-list-content').innerHTML = '';
+            
+            totalAmount = 0;
+            paymentAmount = 0;
+            checkCount = 0;
+            depositAmount = 0;
+            startDate = null;
+            
+            showToast('已清除所有欄位');
+        }
+        
+        // 显示日期选择器
+        function showDatePicker() {
+            vibrate();
+            selectedDate = startDate || new Date();
+            currentViewMonth = new Date(selectedDate);
+            updateDatePicker();
+            document.getElementById('date-picker-overlay').style.display = 'flex';
+        }
+        
+        // 更新日期选择器
+        function updateDatePicker() {
+            // 更新标题
+            const year = currentViewMonth.getFullYear() - 1911; // 民國年
+            const month = currentViewMonth.getMonth() + 1;
+            document.getElementById('date-picker-title').textContent = `${year}年${month}月`;
+            
+            // 清空日历
+            const datePickerBody = document.getElementById('date-picker-body');
+            datePickerBody.innerHTML = '';
+            
+            // 计算月份的第一天是星期几
+            const firstDay = new Date(currentViewMonth.getFullYear(), currentViewMonth.getMonth(), 1);
+            const firstDayOfWeek = firstDay.getDay();
+            
+            // 计算月份的最后一天
+            const lastDay = new Date(currentViewMonth.getFullYear(), currentViewMonth.getMonth() + 1, 0);
+            const lastDate = lastDay.getDate();
+            
+            // 获取今天的日期
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            let dayCount = 1;
+            let html = '<tr>';
+            
+            // 填充月份第一周前的空白
+            for (let i = 0; i < firstDayOfWeek; i++) {
+                html += '<td></td>';
+            }
+            
+            // 填充日期
+            while (dayCount <= lastDate) {
+                const currentDate = new Date(currentViewMonth.getFullYear(), currentViewMonth.getMonth(), dayCount);
+                const isToday = currentDate.getTime() === today.getTime();
+                const isSelected = selectedDate && currentDate.getTime() === selectedDate.getTime();
+                const isPastDate = currentDate < today;
+                
+                // 处理不同状态的日期
+                let className = '';
+                if (isSelected) className += ' selected';
+                if (isToday) className += ' today';
+                if (isPastDate) className += ' disabled';
+                
+                html += `<td class="${className}" data-date="${currentDate.toISOString()}"${isPastDate ? ' disabled' : ''}>${dayCount}</td>`;
+                
+                if ((firstDayOfWeek + dayCount) % 7 === 0) {
+                    html += '</tr><tr>';
+                }
+                
+                dayCount++;
+            }
+            
+            // 填充月份最后一周后的空白
+            const remainingCells = 7 - ((firstDayOfWeek + lastDate) % 7);
+            if (remainingCells < 7) {
+                for (let i = 0; i < remainingCells; i++) {
+                    html += '<td></td>';
+                }
+            }
+            
+            html += '</tr>';
+            datePickerBody.innerHTML = html;
+            
+            // 设置日期点击事件
+            const dateCells = document.querySelectorAll('#date-picker-body td[data-date]');
+            dateCells.forEach(cell => {
+                if (!cell.hasAttribute('disabled')) {
+                    cell.addEventListener('click', function() {
+                        vibrate();
+                        document.querySelectorAll('#date-picker-body td.selected').forEach(sel => {
+                            sel.classList.remove('selected');
+                        });
+                        this.classList.add('selected');
+                        selectedDate = new Date(this.getAttribute('data-date'));
+                    });
                 }
             });
-            });
-        })
-        .catch(err => {
-            console.log('ServiceWorker registration failed: ', err);
-        });
-    });
-    
-    // 監聽來自 Service Worker 的消息
-    navigator.serviceWorker.addEventListener('message', event => {
-        if (event.data.type === 'UPDATE_AVAILABLE') {
-        showUpdateNotification();
         }
-    });
-    }
+        
+        // 保存計算功能
+        // 保存計算功能
+        function saveCheckData() {
+            vibrate();
+            
+            if (!totalAmount || !paymentAmount || !checkCount || !startDate) {
+                showToast('請先完成所有必要欄位的填寫', true);
+                return;
+            }
+            
+            const checkDate = new Date();
+            const formattedDate = `${checkDate.getFullYear()}-${(checkDate.getMonth() + 1).toString().padStart(2, '0')}-${checkDate.getDate().toString().padStart(2, '0')}`;
+            
+            const checkData = {
+                id: new Date().getTime(),
+                date: formattedDate,
+                totalAmount: totalAmount,
+                paymentAmount: paymentAmount,
+                checkCount: checkCount,
+                depositAmount: depositAmount,
+                startDate: startDate.toISOString(),
+                timestamp: new Date().toISOString()
+            };
+            
+            // 獲取已儲存的支票記錄
+            let checkHistory = JSON.parse(localStorage.getItem('checkHistory') || '[]');
+            checkHistory.push(checkData);
+            
+            // 儲存到 localStorage
+            localStorage.setItem('checkHistory', JSON.stringify(checkHistory));
+            
+            showToast('支票計算結果已保存！');
+        }
+        
+        // 设置日期选择器按钮事件
+        function setupDatePicker() {
+            // 上一个月
+            document.getElementById('prev-month').addEventListener('click', function() {
+                vibrate();
+                currentViewMonth.setMonth(currentViewMonth.getMonth() - 1);
+                updateDatePicker();
+            });
+            
+            // 下一个月
+            document.getElementById('next-month').addEventListener('click', function() {
+                vibrate();
+                currentViewMonth.setMonth(currentViewMonth.getMonth() + 1);
+                updateDatePicker();
+            });
 
-    // 顯示更新通知
-    function showUpdateNotification() {
-    // 創建通知元素
-    const updateNotification = document.createElement('div');
-    updateNotification.className = 'toast-message';
-    updateNotification.style.backgroundColor = 'rgba(52, 152, 219, 0.9)';
-    updateNotification.innerHTML = `
-        發現新版本！
-        <button onclick="window.location.reload()" style="
-        background: white; 
-        color: #2980b9; 
-        border: none; 
-        padding: 5px 10px; 
-        margin-left: 10px; 
-        border-radius: 3px; 
-        cursor: pointer;
-        font-weight: bold;
-        ">立即更新</button>
-    `;
-    
-    // 添加到頁面
-    document.body.appendChild(updateNotification);
-    
-    // 添加震動效果
-    if (navigator.vibrate) {
-        navigator.vibrate([100, 50, 100]);
-    }
-    }
+            // 修改確認日期選擇的函數
+            document.getElementById('date-picker-confirm').addEventListener('click', function() {
+                vibrate();
+                if (selectedDate) {
+                    startDate = selectedDate;
+                    updateStartDateDisplay();
+                    document.getElementById('date-picker-overlay').style.display = 'none';
+                    generateCheckList();
+                }
+            });
+            
+            // 取消日期选择
+            document.getElementById('date-picker-cancel').addEventListener('click', function() {
+                vibrate();
+                document.getElementById('date-picker-overlay').style.display = 'none';
+            });
+        }
 
-  </script>
+        // 計算結束日期
+        function calculateEndDate() {
+                if (!startDate || !checkCount) return null;
+                
+                // 複製開始日期
+                const originalDay = startDate.getDate();
+                
+                // 計算最後一期的日期
+                const endDate = new Date(startDate);
+                
+                if (checkCount > 1) {
+                    // 設定為最後一期的月份
+                    endDate.setMonth(endDate.getMonth() + (checkCount - 1), 1);
+                    
+                    // 計算該月的最後一天
+                    const lastDayOfMonth = new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0).getDate();
+                    
+                    // 設定為原始日期的日或該月的最後一天（取較小值）
+                    const dayToSet = Math.min(originalDay, lastDayOfMonth);
+                    endDate.setDate(dayToSet);
+                }
+                
+                return endDate;
+        }
+
+        // 更新結束日期顯示
+        function updateEndDateDisplay() {
+            if (checkCount && startDate) {
+                const endDate = calculateEndDate();
+                if (endDate) {
+                    const formattedDate = formatDateToROC(endDate);
+                    const weekday = getChineseWeekday(endDate);
+                    document.getElementById('end-date').value = `${formattedDate}${weekday}`;
+                } else {
+                     document.getElementById('end-date').value = '';
+                }
+            } else {
+                document.getElementById('end-date').value = '';
+            }
+        }
+
+        // 新增一個函數來更新開始日期的顯示
+        function updateStartDateDisplay() {
+                if (startDate) {
+                    const formattedDate = formatDateToROC(startDate);
+                    const weekday = getChineseWeekday(startDate);
+                    document.getElementById('start-date').value = `${formattedDate}${weekday}`;
+                }
+        }
+        
+        // 显示提示消息
+        function showToast(message, isError = false) {
+            const existingToast = document.querySelector('.toast-message');
+            if (existingToast) {
+                document.body.removeChild(existingToast);
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast-message';
+            if (isError) {
+                toast.classList.add('toast-error');
+            }
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    if (document.body.contains(toast)) {
+                        document.body.removeChild(toast);
+                    }
+                }, 500);
+            }, 2000);
+        }
+        
+        // 初始化
+        function init() {
+            updateCurrentDate();
+            setupCalculator();
+            setupDatePicker();
+            
+            // 设置定时器，每秒更新当前时间
+            setInterval(updateCurrentDate, 1000);
+            
+            // 点击背景关闭模态框
+            const overlays = document.querySelectorAll('.overlay');
+            overlays.forEach(overlay => {
+                overlay.addEventListener('click', function(event) {
+                    if (event.target === this) {
+                        this.style.display = 'none';
+                    }
+                });
+            });
+
+            // 添加回到頂部按鈕功能
+            const backToTopBtn = document.getElementById('backToTop');
+            backToTopBtn.addEventListener('click', function() {
+                vibrate();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // 監聽滾動事件來顯示/隱藏按鈕
+            window.addEventListener('scroll', function() {
+                if (document.body.scrollHeight > window.innerHeight * 2 && window.scrollY > window.innerHeight) {
+                    backToTopBtn.style.display = 'flex';
+                } else {
+                    backToTopBtn.style.display = 'none';
+                }
+            });
+        }
+
+        // 顯示/隱藏歷史記錄面板
+        function toggleHistoryPanel() {
+            vibrate();
+            const panel = document.getElementById('historyPanel');
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+            } else {
+                panel.style.display = 'block';
+                loadHistoryData();
+            }
+        }
+
+        // 載入歷史記錄
+        function loadHistoryData() {
+            const historyContent = document.getElementById('historyContent');
+            const checkHistory = JSON.parse(localStorage.getItem('checkHistory') || '[]');
+            
+            if (checkHistory.length === 0) {
+                historyContent.innerHTML = '<p class="no-data">尚無支票計算記錄</p>';
+                return;
+            }
+            
+            // 按日期排序，最新的在前面
+            checkHistory.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            let html = '<div class="history-list">';
+            checkHistory.forEach(check => {
+                // 確保數值正確顯示
+                const totalAmountDisplay = formatNumber(check.totalAmount);
+                const paymentAmountDisplay = formatNumber(check.paymentAmount);
+                const depositAmountDisplay = formatNumber(check.depositAmount);
+                
+                // 格式化日期，從ISO字符串轉換回日期對象
+                const startDateObj = new Date(check.startDate);
+                const formattedStartDate = formatDateToROC(startDateObj);
+                const saveDate = formatDate(check.date);
+                
+                html += `
+                    <div class="history-item">
+                        <div class="history-item-header">
+                            <div class="history-date">${saveDate}</div>
+                            <div class="history-header-rate">押票金額: ${depositAmountDisplay}</div>
+                        </div>
+                        
+                        <div class="history-details">
+                            <div class="history-detail-item">
+                                <span class="detail-label">開始日期</span>
+                                <span class="detail-value">${formattedStartDate}</span>
+                            </div>
+                            <div class="history-detail-item">
+                                <span class="detail-label">總金額</span>
+                                <span class="detail-value">${totalAmountDisplay}</span>
+                            </div>
+                            <div class="history-detail-item">
+                                <span class="detail-label">張數</span>
+                                <span class="detail-value">${check.checkCount}</span>
+                            </div>
+                            <div class="history-detail-item">
+                                <span class="detail-label">繳款金額</span>
+                                <span class="detail-value">${paymentAmountDisplay}</span>
+                            </div>
+                        </div>
+
+                        <div class="history-actions">
+                            <button class="detail-btn" onclick="loadCheckDataToForm(${check.id})">載入計算</button>
+                            <button class="delete-btn" onclick="deleteCheckData(${check.id})">刪除</button>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            historyContent.innerHTML = html;
+        }
+
+        // 載入數據到表單
+        function loadCheckDataToForm(id) {
+            const checkHistory = JSON.parse(localStorage.getItem('checkHistory') || '[]');
+            const checkData = checkHistory.find(item => item.id === id);
+            
+            if (checkData) {
+                totalAmount = checkData.totalAmount;
+                paymentAmount = checkData.paymentAmount;
+                checkCount = checkData.checkCount;
+                depositAmount = checkData.depositAmount;
+                startDate = new Date(checkData.startDate);
+                
+                document.getElementById('total-amount').value = formatNumber(totalAmount);
+                document.getElementById('payment-amount').value = formatNumber(paymentAmount);
+                document.getElementById('check-count').value = formatNumber(checkCount);
+                document.getElementById('deposit-amount').value = formatNumber(depositAmount);
+                updateStartDateDisplay();
+                
+                // 重新生成開票日期列表和更新結束日期
+                generateCheckList();
+                updateEndDateDisplay();
+                
+                // 顯示押票金額
+                if (depositAmount > 0) {
+                    document.getElementById('deposit-amount-display').textContent = `押票金額：${formatNumber(depositAmount)}`;
+                    document.getElementById('deposit-amount-display').style.display = 'block';
+                } else {
+                    document.getElementById('deposit-amount-display').style.display = 'none';
+                }
+                
+                // 關閉歷史面板
+                document.getElementById('historyPanel').style.display = 'none';
+                
+                showToast('已載入支票計算資料');
+            }
+        }
+
+        // 刪除單筆數據
+        function deleteCheckData(id) {
+            vibrate();
+            showConfirmModal('確認刪除', '確定要刪除這筆記錄嗎？', function() {
+                let checkHistory = JSON.parse(localStorage.getItem('checkHistory') || '[]');
+                checkHistory = checkHistory.filter(item => item.id !== id);
+                localStorage.setItem('checkHistory', JSON.stringify(checkHistory));
+                loadHistoryData();
+                showToast('記錄已刪除');
+            });
+        }
+
+        // 確認刪除所有記錄
+        function confirmDeleteAll() {
+            vibrate();
+            showConfirmModal('確認刪除全部', '確定要刪除所有支票計算記錄嗎？此操作無法恢復。', function() {
+                localStorage.removeItem('checkHistory');
+                loadHistoryData();
+                showToast('所有記錄已刪除');
+            });
+        }
+
+        // 顯示確認對話框
+        function showConfirmModal(title, content, callback) {
+            document.getElementById('confirmModalTitle').textContent = title;
+            document.getElementById('confirmModalContent').textContent = content;
+            document.getElementById('confirmModalOverlay').style.display = 'flex';
+            
+            // 設定確認按鈕事件
+            const confirmButton = document.getElementById('confirmModalOk');
+            const newButton = confirmButton.cloneNode(true);
+            confirmButton.parentNode.replaceChild(newButton, confirmButton);
+            
+            newButton.addEventListener('click', function() {
+                hideConfirmModal();
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
+        }
+
+        // 隱藏確認對話框
+        function hideConfirmModal() {
+            document.getElementById('confirmModalOverlay').style.display = 'none';
+        }
+
+        // 格式化日期
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}/${month}/${day}`;
+        }
+        
+        // 加载完成后启动应用
+        window.addEventListener('DOMContentLoaded', init);
+
+    </script>
+
+    <!-- 歷史記錄面板 -->
+    <div id="historyPanel" class="history-panel">
+        <div class="history-header">
+            <div class="header-left">
+                <h2>支票計算歷史記錄</h2>
+            </div>
+            <div class="header-right">
+                <button class="delete-all-btn" onclick="confirmDeleteAll()">全部刪除</button>
+            </div>
+            <button class="close-btn" onclick="toggleHistoryPanel()">×</button>
+        </div>
+        <div id="historyContent" class="history-content"></div>
+    </div>
+
+    <!-- 確認對話框 -->
+    <div id="confirmModalOverlay" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="confirmModalTitle">確認</h3>
+                <button class="close-btn" onclick="hideConfirmModal()">×</button>
+            </div>
+            <div id="confirmModalContent" class="modal-content"></div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="hideConfirmModal()">取消</button>
+                <button id="confirmModalOk" class="modal-btn modal-btn-primary">確定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 回到頂部按鈕 -->
+    <div id="backToTop" class="back-to-top"></div> 
 
 </body>
 </html>
