@@ -355,55 +355,149 @@
 
         .check-list {
             margin-top: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 10px;
+            padding: 12px;
             background-color: var(--secondary-color);
-            box-shadow: 0 4px 8px var(--shadow-color);
+            box-shadow: 0 4px 10px var(--shadow-color);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .check-list::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--button-orange), transparent);
         }
 
         .check-list-title {
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             color: var(--button-orange);
             font-size: 18px;
-            padding-bottom: 5px;
+            padding-bottom: 6px;
             border-bottom: 1px solid rgba(255, 156, 51, 0.3);
             text-align: center;
+            position: relative;
+            letter-spacing: 1px;
+        }
+
+        .check-list-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255, 156, 51, 0.3), transparent);
         }
 
         .check-list-table {
             width: 100%;
             border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         .check-list-table th {
             background-color: #3a3a3a;
-            padding: 8px;
+            padding: 10px 5px;
             text-align: center;
             border-bottom: 1px solid #555;
             color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .check-list-table td {
-            padding: 8px;
+            padding: 10px 5px;
             text-align: center;
-            border-bottom: 1px solid #444;
+            border-bottom: 1px solid rgba(68, 68, 68, 0.5);
             color: #eee;
+            transition: all 0.3s ease;
         }
-        
+
+        .check-list-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .check-list-table td:nth-child(1) {
+            font-weight: bold;
+            color: var(--button-orange);
+            width: 60px;
+        }
+
         .check-list-table td:nth-child(2) {
             text-align: left;
             padding-left: 12px;
+            width: 150px;
         }
-        
+
         .check-list-table td:nth-child(3) {
             text-align: left;
             padding-left: 5px;
+            width: 60px;
+            color: #aaa;
+        }
+
+        .check-list-table td:nth-child(4) {
+            width: 70px;
+            font-weight: bold;
+        }
+
+        /* 跨年度提示樣式 */
+        .year-change-row {
+            background: transparent !important;
+            height: 20px;
+        }
+
+        .year-change-row:hover {
+            background: transparent !important;
+        }
+
+        .year-change-indicator {
+            position: relative;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255, 156, 51, 0.3), transparent);
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .year-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--secondary-color);
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: var(--button-orange);
+            font-weight: bold;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            opacity: 0.8;
+            letter-spacing: 1px;
+        }
+
+        /* 奇偶行樣式差異 */
+        .check-list-table tr.row-0 {
+            background-color: rgba(60, 60, 60, 0.5);
+        }
+
+        .check-list-table tr.row-1 {
+            background-color: rgba(70, 70, 70, 0.5);
         }
 
         .check-list-table tr:hover {
-            background-color: #505050;
+            background-color: rgba(80, 80, 80, 0.8) !important;
+            transform: translateX(3px);
+            transition: all 0.3s ease;
         }
 
         .deposit-amount-display {
@@ -589,20 +683,49 @@
         /* 日期選擇器覆蓋層 */
         .date-picker {
             background-color: var(--primary-color);
-            border-radius: 12px;
-            padding: 15px;
-            width: 90%;
-            max-width: 350px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+            padding: 18px;
+            width: 85%;  /* 從92%改為85% */
+            max-width: 340px;  /* 從360px改為340px */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+            animation: datepickerFadeIn 0.3s ease-out;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes datepickerFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .date-picker::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--button-orange), transparent);
         }
 
         .date-picker-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
             border-bottom: 1px solid rgba(255, 156, 51, 0.3);
+            position: relative;
+        }
+
+        .date-picker-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255, 156, 51, 0.3), transparent);
         }
 
         .date-picker-title {
@@ -610,107 +733,256 @@
             font-weight: bold;
             flex-grow: 1;
             color: var(--button-orange);
-            font-size: 18px;
+            font-size: 20px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
         }
 
         .date-picker-nav {
             cursor: pointer;
-            padding: 5px 10px;
-            background: #3a3a3a;
-            border-radius: 4px;
-            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(58, 58, 58, 0.8);
+            border-radius: 50%;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             color: var(--text-color);
+            font-size: 18px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .date-picker-nav::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 156, 51, 0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .date-picker-nav:hover {
             background-color: #4a4a4a;
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .date-picker-nav:hover::after {
+            opacity: 1;
+        }
+
+        .date-picker-nav:active {
+            transform: scale(0.95);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         .date-picker-calendar {
             width: 100%;
-            border-collapse: collapse;
-            border-radius: 8px;
+            border-collapse: separate;
+            border-spacing: 4px;
+            border-radius: 10px;
             overflow: hidden;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
+            min-height: 260px; /* 新增這一行，確保最小高度 */
         }
 
         .date-picker-calendar th {
             background-color: #3a3a3a;
-            padding: 8px;
+            padding: 10px 0;
             text-align: center;
             color: #eee;
+            font-size: 15px;
+            border-radius: 6px;
+        }
+
+        /* 週六的標題樣式 */
+        .date-picker-calendar th:nth-child(7) {
+            background-color: #4e4e4e;
+            color: #ccccff;
+        }
+
+        /* 週日的標題樣式 */
+        .date-picker-calendar th:nth-child(1) {
+            background-color: #4e4e4e;
+            color: #ffcccc;
         }
 
         .date-picker-calendar td {
-            padding: 10px;
+            padding: 0;
             text-align: center;
             cursor: pointer;
-            border-radius: 4px;
+            border-radius: 50%;
             color: #eee;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            width: 40px;
+            height: 40px;
         }
 
-        .date-picker-calendar td:hover:not(.disabled) {
+        .date-picker-calendar td > div {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* 周六的日期樣式 */
+        .date-picker-calendar td:nth-child(7) > div {
+            background-color: rgba(100, 100, 180, 0.1);
+        }
+
+        /* 周日的日期樣式 */
+        .date-picker-calendar td:nth-child(1) > div {
+            background-color: rgba(180, 100, 100, 0.1);
+        }
+
+        .date-picker-calendar td:hover:not(.disabled) > div {
             background-color: #4a4a4a;
-            transform: scale(1.05);
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
-        .date-picker-calendar td.selected {
+        .date-picker-calendar td.selected > div {
             background-color: var(--button-orange);
             color: white;
             font-weight: bold;
+            box-shadow: 0 2px 10px rgba(255, 156, 51, 0.5);
+            animation: selected-pulse 1.5s infinite;
         }
 
-        .date-picker-calendar td.disabled {
-            color: #666;
+        @keyframes selected-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 156, 51, 0.7); }
+            50% { box-shadow: 0 0 0 8px rgba(255, 156, 51, 0); }
+        }
+
+        .date-picker-calendar td.disabled > div {
+            color: #555;
             cursor: not-allowed;
+            background-color: rgba(60, 60, 60, 0.1);
         }
 
-        .date-picker-calendar td.today {
+        .date-picker-calendar td.today > div {
             border: 2px solid var(--button-orange);
+            animation: today-pulse 2s infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        .date-picker-calendar td.today > div::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(255, 156, 51, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        @keyframes today-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 156, 51, 0.6); }
+            50% { box-shadow: 0 0 0 6px rgba(255, 156, 51, 0); }
+        }
+
+        .date-picker-calendar td.today.selected > div {
+            border: 2px solid white;
         }
 
         .date-picker-actions {
             display: flex;
             justify-content: space-between;
-            margin-top: 10px;
+            margin-top: 12px;
+            gap: 12px;
         }
 
         .date-picker-button {
-            padding: 10px 15px;
+            padding: 12px 0;
             border: none;
-            border-radius: 6px;
+            border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-weight: bold;
+            font-size: 16px;
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .date-picker-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .date-picker-button:hover::after {
+            opacity: 1;
         }
 
         .date-picker-button.confirm {
             background-color: var(--button-orange);
             color: white;
-            flex: 1;
-            margin-left: 10px;
         }
 
         .date-picker-button.confirm:hover {
             background-color: #ff8c13;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(255, 156, 51, 0.4);
+        }
+
+        .date-picker-button.confirm:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(255, 156, 51, 0.4);
         }
 
         .date-picker-button.cancel {
             background-color: #e74c3c;
             color: white;
-            flex: 1;
-            margin-right: 10px;
         }
 
         .date-picker-button.cancel:hover {
             background-color: #d62c1a;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(231, 76, 60, 0.4);
+        }
+
+        .date-picker-button.cancel:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(231, 76, 60, 0.4);
+        }
+
+        .date-picker-button.today {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .date-picker-button.today:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .date-picker-button.today:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(52, 152, 219, 0.4);
         }
         
         .toast-message {
@@ -1136,6 +1408,271 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
+        .number-input-modal {
+            background-color: var(--primary-color);
+            border-radius: 12px;
+            width: 95%;
+            max-width: 350px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        .calculator-display-container {
+            display: flex;
+            flex-direction: column;
+            background-color: #1a1a1a;
+            margin: 10px;
+            border-radius: 10px;
+            border: 1px solid #444444;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            height: 110px; /* 固定高度 */
+            position: relative;
+        }
+
+        .calculator-history {
+            color: #9e9e9e;
+            font-size: 16px;
+            padding: 8px 15px;
+            text-align: right;
+            height: 40px; /* 固定高度 */
+            overflow-y: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            line-height: 1.3;
+            word-break: break-all;
+            font-family: 'Consolas', monospace;
+            position: relative;
+            background: linear-gradient(to bottom, #1e1e1e, #2a2a2a);
+        }
+
+        .calculator-history::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255, 156, 51, 0.4), transparent);
+        }
+
+        .calculator-display {
+            background-color: #2a2a2a;
+            color: white;
+            font-size: 36px;
+            padding: 10px 15px;
+            text-align: right;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            overflow: hidden;
+            margin: 0;
+            border: none;
+            box-shadow: none;
+            font-family: 'Consolas', monospace;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            position: relative;
+            background: linear-gradient(to bottom, #2a2a2a, #222222);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .calculator-scroll-indicator {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 12px;
+            height: 12px;
+            background-color: rgba(255, 156, 51, 0.7);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+
+        .has-overflow .calculator-scroll-indicator {
+            opacity: 1;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(5, auto);
+            gap: 6px;
+            padding: 10px;
+        }
+
+        .calculator-buttons button {
+            padding: 10px 0;
+            font-size: 20px;
+            border-radius: 10px;
+            background-color: #3a3a3a;
+            color: var(--text-color);
+            border: none;
+            transition: all 0.2s ease;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 48px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculator-buttons button:hover {
+            background-color: #464646;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .calculator-buttons button:active {
+            transform: scale(0.95);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .calculator-buttons .number-btn {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            padding: 5px 2px;
+            position: relative;
+        }
+
+        .calculator-buttons .arabic-number {
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 1;
+            margin-right: 3px;
+            flex-grow: 0;
+        }
+
+        .calculator-buttons .financial-char {
+            font-size: 18px;
+            color: var(--button-orange);
+            line-height: 1;
+            position: absolute;
+            right: 6px;
+            opacity: 0.9;
+        }
+
+        .calculator-buttons .number-btn:active .arabic-number,
+        .calculator-buttons .number-btn:active .financial-char {
+            color: white;
+        }
+
+        .calculator-buttons .zero {
+            grid-column: span 2;
+            background-color: #3a3a3a;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calculator-buttons .zero .arabic-number {
+            position: absolute;
+            left: 40%;
+            transform: translateX(-50%);
+            margin-right: 0;
+        }
+
+        .calculator-buttons .zero .financial-char {
+            right: 15px;
+        }
+
+        .calculator-buttons .operator,
+        .calculator-buttons .equals {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .calculator-buttons .clear,
+        .calculator-buttons .function {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .calculator-buttons button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%, -50%);
+            transform-origin: 50% 50%;
+        }
+
+        .calculator-buttons button:active::after {
+            animation: ripple 0.4s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0) translate(-50%, -50%);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20) translate(-50%, -50%);
+                opacity: 0;
+            }
+        }
+
+        .calculator-buttons .function {
+            background-color: #4d4d4d;
+            color: #eee;
+            font-weight: bold;
+        }
+
+        .calculator-buttons .operator {
+            background-color: rgba(255, 156, 51, 0.9);
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(255, 156, 51, 0.4);
+        }
+
+        .calculator-buttons .clear {
+            background-color: rgba(231, 76, 60, 0.9);
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(231, 76, 60, 0.4);
+        }
+
+        .calculator-buttons .equals {
+            background-color: rgba(52, 152, 219, 0.9);
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(52, 152, 219, 0.4);
+        }
+
+        .calculator-buttons .zero {
+            grid-column: span 2;
+            background-color: #3a3a3a;
+        }
+
+        .calculator-buttons .submit {
+            grid-column: span 2;
+            background-color: var(--button-orange);
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(255, 156, 51, 0.4);
+        }
+
     </style>
 </head>
 <body>
@@ -1209,65 +1746,6 @@
     
     <div class="footer-spacing"></div>
     
-    <!-- 數字輸入器覆蓋層 -->
-    <div class="overlay" id="calculator-overlay">
-        <div class="calculator">
-            <div class="calculator-title" id="calculator-title">總金額</div>
-            <div class="calculator-display" id="calculator-display"></div>
-            <div class="calculator-result" id="calculator-result"></div>
-            <div class="calculator-keys">
-                <div class="calculator-key" data-value="7">
-                    <span class="digit">7</span>
-                    <span class="chinese-digit">柒</span>
-                </div>
-                <div class="calculator-key" data-value="8">
-                    <span class="digit">8</span>
-                    <span class="chinese-digit">捌</span>
-                </div>
-                <div class="calculator-key" data-value="9">
-                    <span class="digit">9</span>
-                    <span class="chinese-digit">玖</span>
-                </div>
-                <div class="calculator-key operation" data-value="+">+</div>
-                <div class="calculator-key" data-value="4">
-                    <span class="digit">4</span>
-                    <span class="chinese-digit">肆</span>
-                </div>
-                <div class="calculator-key" data-value="5">
-                    <span class="digit">5</span>
-                    <span class="chinese-digit">伍</span>
-                </div>
-                <div class="calculator-key" data-value="6">
-                    <span class="digit">6</span>
-                    <span class="chinese-digit">陸</span>
-                </div>
-                <div class="calculator-key operation" data-value="-">-</div>
-                <div class="calculator-key" data-value="1">
-                    <span class="digit">1</span>
-                    <span class="chinese-digit">壹</span>
-                </div>
-                <div class="calculator-key" data-value="2">
-                    <span class="digit">2</span>
-                    <span class="chinese-digit">貳</span>
-                </div>
-                <div class="calculator-key" data-value="3">
-                    <span class="digit">3</span>
-                    <span class="chinese-digit">參</span>
-                </div>
-                <div class="calculator-key operation" data-value="*">×</div>
-                <div class="calculator-key" data-value="0">
-                    <span class="digit">0</span>
-                    <span class="chinese-digit">零</span>
-                </div>
-                <div class="calculator-key operation" data-value="C">C</div>
-                <div class="calculator-key operation" data-value="CE">CE</div>
-                <div class="calculator-key operation" data-value="/">/</div>
-                <div class="calculator-key cancel" data-value="cancel">取消</div>
-                <div class="calculator-key enter" data-value="enter">輸入</div>
-            </div>
-        </div>
-    </div>
-    
     <!-- 日期選擇器覆蓋層 -->
     <div class="overlay" id="date-picker-overlay">
         <div class="date-picker">
@@ -1294,6 +1772,7 @@
             </table>
             <div class="date-picker-actions">
                 <button class="date-picker-button cancel" id="date-picker-cancel">取消</button>
+                <button class="date-picker-button today" id="date-picker-today">今日</button>
                 <button class="date-picker-button confirm" id="date-picker-confirm">確認</button>
             </div>
         </div>
@@ -1316,6 +1795,186 @@
         // 日期選擇器相關變數
         let selectedDate = null;
         let currentViewMonth = new Date();
+
+        // 全局變量
+        let currentInputField = null;
+        let calculatorValue = "0";
+        let calculatorOperator = null;
+        let calculatorFirstValue = null;
+        let calculatorWaitingForSecondValue = false;
+        let calculatorHistory = ""; // 新增：計算過程記錄
+
+        // 關閉模態框
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            
+            // 添加震動效果
+            vibrate();
+        }
+
+        // 計算機數字輸入
+        function calculatorInput(num) {
+            if (calculatorWaitingForSecondValue) {
+                calculatorValue = num.toString();
+                calculatorWaitingForSecondValue = false;
+            } else {
+                calculatorValue = calculatorValue === '0' ? num.toString() : calculatorValue + num.toString();
+            }
+            document.getElementById('calculatorDisplay').textContent = calculatorValue;
+            
+            // 添加震動效果
+            vibrate();
+        }
+
+        // 計算機清除
+        function calculatorClear() {
+            calculatorValue = '0';
+            calculatorOperator = null;
+            calculatorFirstValue = null;
+            calculatorWaitingForSecondValue = false;
+            calculatorHistory = ""; // 清空計算歷史
+            document.getElementById('calculatorDisplay').textContent = calculatorValue;
+            document.getElementById('calculatorHistory').textContent = ""; // 清空歷史顯示
+            document.getElementById('historyScrollIndicator').style.opacity = '0'; // 隱藏滾動指示器
+            
+            // 添加震動效果
+            vibrate();
+        }
+
+        // 計算機退格
+        function calculatorBackspace() {
+            if (calculatorValue.length > 1) {
+                calculatorValue = calculatorValue.slice(0, -1);
+            } else {
+                calculatorValue = '0';
+            }
+            document.getElementById('calculatorDisplay').textContent = calculatorValue;
+            
+            // 添加震動效果
+            vibrate();
+        }
+
+        // 計算機運算符
+        function calculatorOperation(op) {
+            // 如果已經有運算符在等待，先進行計算
+            if (calculatorFirstValue !== null && calculatorOperator !== null) {
+                calculatorEquals();
+            }
+            
+            calculatorFirstValue = parseFloat(calculatorValue);
+            calculatorOperator = op;
+            calculatorWaitingForSecondValue = true;
+            
+            // 更新計算歷史
+            let opSymbol = op;
+            switch(op) {
+                case '+': opSymbol = ' + '; break;
+                case '-': opSymbol = ' - '; break;
+                case '*': opSymbol = ' × '; break;
+                case '/': opSymbol = ' ÷ '; break;
+            }
+            
+            // 添加當前數字和運算符到歷史記錄
+            if (calculatorHistory === "") {
+                calculatorHistory = calculatorValue + opSymbol;
+            } else {
+                // 檢查是否需要換行
+                if (calculatorHistory.length > 20) {
+                    calculatorHistory += "\n" + calculatorValue + opSymbol;
+                } else {
+                    calculatorHistory += calculatorValue + opSymbol;
+                }
+            }
+            
+            // 顯示計算歷史並檢查是否需要顯示滾動指示器
+            updateCalculatorHistory();
+            
+            // 添加震動效果
+            vibrate();
+        }
+
+        // 計算機等號
+        function calculatorEquals() {
+            if (calculatorFirstValue === null || calculatorOperator === null) return;
+            
+            const secondValue = parseFloat(calculatorValue);
+            let result;
+            
+            // 完成歷史記錄的運算式
+            let completeExpression = calculatorHistory + calculatorValue + " = ";
+            
+            switch (calculatorOperator) {
+                case '+':
+                    result = calculatorFirstValue + secondValue;
+                    break;
+                case '-':
+                    result = calculatorFirstValue - secondValue;
+                    break;
+                case '*':
+                    result = calculatorFirstValue * secondValue;
+                    break;
+                case '/':
+                    // 增加除零檢查
+                    if (secondValue === 0) {
+                        showToast('錯誤：不能除以零', true);
+                        calculatorClear();
+                        return;
+                    }
+                    result = calculatorFirstValue / secondValue;
+                    break;
+                default:
+                    return;
+            }
+            
+            // 限制小數點位數，但保留有意義的數字
+            calculatorValue = result.toString();
+            if (calculatorValue.includes('.')) {
+                // 如果是小數，限制最多顯示8位，但去除尾部無意義的零
+                calculatorValue = parseFloat(result.toFixed(8)).toString();
+            }
+            
+            // 更新顯示
+            document.getElementById('calculatorDisplay').textContent = calculatorValue;
+            
+            // 更新歷史記錄，保持較短的顯示
+            if (completeExpression.length > 30) {
+                // 如果表達式太長，只顯示最後的等號部分
+                calculatorHistory = calculatorValue;
+            } else {
+                // 如果表達式不太長，顯示完整表達式
+                calculatorHistory = completeExpression;
+            }
+            
+            // 顯示計算歷史並檢查是否需要顯示滾動指示器
+            updateCalculatorHistory();
+            
+            // 為下一次計算準備
+            calculatorOperator = null;
+            calculatorFirstValue = parseFloat(calculatorValue);
+            calculatorWaitingForSecondValue = true;
+            
+            // 添加震動效果
+            vibrate();
+        }
+
+        // 更新計算歷史顯示，並檢查是否需要顯示滾動指示器
+        function updateCalculatorHistory() {
+            const historyElement = document.getElementById('calculatorHistory');
+            const indicatorElement = document.getElementById('historyScrollIndicator');
+            
+            // 更新歷史內容
+            historyElement.textContent = calculatorHistory;
+            
+            // 檢查是否內容溢出需要顯示滾動指示器
+            const isOverflowing = historyElement.scrollWidth > historyElement.clientWidth || 
+                                historyElement.scrollHeight > historyElement.clientHeight;
+            
+            if (isOverflowing) {
+                historyElement.classList.add('has-overflow');
+            } else {
+                historyElement.classList.remove('has-overflow');
+            }
+        }
 
         // 檢查並處理服務工作者更新
         if ('serviceWorker' in navigator) {
@@ -1472,24 +2131,29 @@
                 if (depositAmount <= 0) {
                     document.getElementById('deposit-amount').value = '';
                     document.getElementById('deposit-amount-display').textContent = '';
+                    document.getElementById('deposit-amount-display').style.display = 'none';
                     showToast('錯誤：押票金額必須大於零', true);
                     return;
                 }
                 
+                // 更新押票金額顯示
                 document.getElementById('deposit-amount').value = formatNumber(depositAmount);
                 document.getElementById('deposit-amount-display').textContent = `押票金額：${formatNumber(depositAmount)}`;
+                document.getElementById('deposit-amount-display').style.display = 'block';
             } else {
+                // 清空押票金額
                 document.getElementById('deposit-amount').value = '';
                 document.getElementById('deposit-amount-display').textContent = '';
+                document.getElementById('deposit-amount-display').style.display = 'none';
+                depositAmount = 0;
             }
         }
         
         // 生成開票日期列表
-        // 生成開票日期列表
         function generateCheckList() {
             if (!checkCount || !startDate) {
                 document.getElementById('check-list-content').innerHTML = '';
-                document.getElementById('deposit-amount-display').style.display = 'none'; // 隱藏押票金額
+                document.getElementById('deposit-amount-display').style.display = 'none';
                 return;
             }
             
@@ -1497,30 +2161,42 @@
             html += '<thead><tr><th>流水號</th><th>日期</th><th>星期</th><th>剩餘張數</th></tr></thead>';
             html += '<tbody>';
             
-            const originalDay = startDate.getDate(); // 获取开始日期的日
+            const originalDay = startDate.getDate();
+            let currentYear = startDate.getFullYear();
             
             for (let i = 0; i < checkCount; i++) {
-                // 创建新的日期对象，避免修改原始日期
                 let checkDate = new Date(startDate);
                 
-                // 调整到相应月份
                 if (i > 0) {
-                    // 先设置为下一个月的1号
                     checkDate.setMonth(checkDate.getMonth() + i, 1);
                     
-                    // 计算该月的最后一天
                     const lastDayOfMonth = new Date(checkDate.getFullYear(), checkDate.getMonth() + 1, 0).getDate();
                     
-                    // 设置为原始日期的日或该月的最后一天（取较小值）
                     const dayToSet = Math.min(originalDay, lastDayOfMonth);
                     checkDate.setDate(dayToSet);
+                }
+                
+                // 檢查是否跨年度
+                const newYear = checkDate.getFullYear() !== currentYear;
+                
+                if (newYear) {
+                    // 添加跨年度提示
+                    html += `<tr class="year-change-row">
+                        <td colspan="4">
+                            <div class="year-change-indicator">
+                                <span class="year-text">${checkDate.getFullYear() - 1911}年</span>
+                            </div>
+                        </td>
+                    </tr>`;
+                    currentYear = checkDate.getFullYear();
                 }
                 
                 const formattedDate = formatDateToROC(checkDate);
                 const weekday = getChineseWeekday(checkDate);
                 const remainingChecks = checkCount - i;
                 
-                html += `<tr>
+                // 為每行添加行號的class，用於視覺差異化
+                html += `<tr class="row-${i % 2}">
                     <td>${i + 1}</td>
                     <td>${formattedDate}</td>
                     <td>${weekday}</td>
@@ -1531,36 +2207,39 @@
             html += '</tbody></table>';
             document.getElementById('check-list-content').innerHTML = html;
             
-            // 顯示押票金額
-            if (depositAmount > 0) {
-                document.getElementById('deposit-amount-display').style.display = 'block';
-            } else {
-                document.getElementById('deposit-amount-display').style.display = 'none';
-            }
-            
             // 更新結束日期
             updateEndDateDisplay();
         }
         
         // 打开计算器
         function openCalculator(targetId, title) {
-            vibrate();
-            currentTarget = document.getElementById(targetId);
-            document.getElementById('calculator-title').textContent = title;
+            currentInputField = targetId; // 替換 currentTarget
+            document.getElementById('inputModalTitle').textContent = title;
             
-            // 获取当前输入框的值（如果有）
-            if (currentTarget.value) {
-                expressionDisplay = currentTarget.value.replace(/,/g, '');
-                resultValue = parseFloat(expressionDisplay);
+            // 獲取當前輸入框的值
+            const currentValue = document.getElementById(targetId).value;
+            
+            if (currentValue && currentValue !== '') {
+                // 如果輸入框有值，使用該值初始化計算器
+                calculatorValue = currentValue.replace(/,/g, ''); // 移除千位分隔符
+                document.getElementById('calculatorDisplay').textContent = calculatorValue;
             } else {
-                expressionDisplay = '';
-                resultValue = 0;
+                // 如果輸入框沒有值，使用 "0"
+                calculatorValue = "0";
+                document.getElementById('calculatorDisplay').textContent = calculatorValue;
             }
             
-            document.getElementById('calculator-display').textContent = expressionDisplay;
-            document.getElementById('calculator-result').textContent = resultValue ? formatNumber(resultValue) : '';
+            calculatorOperator = null;
+            calculatorFirstValue = null;
+            calculatorWaitingForSecondValue = false;
+            calculatorHistory = ""; // 清空計算歷史
+            document.getElementById('calculatorHistory').textContent = ""; // 清空歷史顯示
+            document.getElementById('historyScrollIndicator').style.opacity = '0'; // 隱藏滾動指示器
             
-            document.getElementById('calculator-overlay').style.display = 'flex';
+            document.getElementById('numberInputModal').style.display = 'flex';
+            
+            // 添加震動效果
+            vibrate();
         }
         
         // 数字输入器按键点击处理
@@ -1655,6 +2334,64 @@
                 });
             });
         }
+
+        function submitCalculatorValue() {
+            if (!currentInputField) return;
+            
+            let value = parseFloat(calculatorValue);
+            if (isNaN(value)) value = 0;
+            
+            // 根据不同输入框进行验证
+            switch (currentInputField) {
+                case 'total-amount':
+                    // 總金額不能超過9位數
+                    if (value > 999999999) {
+                        showToast('錯誤：總金額不能超過9位數', true);
+                        return;
+                    }
+                    value = Math.round(value);
+                    document.getElementById(currentInputField).value = formatNumber(value);
+                    
+                    // 新增這兩行
+                    totalAmount = value;
+                    calculateDepositAmount(); // 重新計算押票金額
+                    break;
+                    
+                case 'payment-amount':
+                    // 繳款金額不能超過7位數
+                    if (value > 9999999) {
+                        showToast('錯誤：繳款金額不能超過7位數', true);
+                        return;
+                    }
+                    value = Math.round(value);
+                    document.getElementById(currentInputField).value = formatNumber(value);
+                    
+                    // 新增這兩行
+                    paymentAmount = value;
+                    calculateDepositAmount(); // 重新計算押票金額
+                    break;
+                    
+                case 'check-count':
+                    // 開票張數不能超過2位數
+                    if (value > 99) {
+                        showToast('錯誤：開票張數不能超過2位數', true);
+                        return;
+                    }
+                    value = Math.round(value);
+                    document.getElementById(currentInputField).value = formatNumber(value);
+                    
+                    // 新增這兩行
+                    checkCount = value;
+                    calculateDepositAmount(); // 重新計算押票金額
+                    break;
+            }
+            
+            // 關閉模態框
+            closeModal('numberInputModal');
+            
+            // 添加震動效果
+            vibrate();
+        }
         
         // 清除字段
         function clearField(fieldId) {
@@ -1704,7 +2441,7 @@
             updateDatePicker();
             document.getElementById('date-picker-overlay').style.display = 'flex';
         }
-        
+
         // 更新日期选择器
         function updateDatePicker() {
             // 更新标题
@@ -1749,7 +2486,7 @@
                 if (isToday) className += ' today';
                 if (isPastDate) className += ' disabled';
                 
-                html += `<td class="${className}" data-date="${currentDate.toISOString()}"${isPastDate ? ' disabled' : ''}>${dayCount}</td>`;
+                html += `<td class="${className}" data-date="${currentDate.toISOString()}"${isPastDate ? ' disabled' : ''}><div>${dayCount}</div></td>`;
                 
                 if ((firstDayOfWeek + dayCount) % 7 === 0) {
                     html += '</tr><tr>';
@@ -1766,6 +2503,21 @@
                 }
             }
             
+            // 計算已經使用了多少行
+            const totalDays = firstDayOfWeek + lastDate + remainingCells;
+            const usedRows = Math.ceil(totalDays / 7);
+            
+            // 如果少於6行，添加額外的空行來填充
+            if (usedRows < 6) {
+                const extraRows = 6 - usedRows;
+                for (let i = 0; i < extraRows; i++) {
+                    html += '</tr><tr>';
+                    for (let j = 0; j < 7; j++) {
+                        html += '<td></td>';
+                    }
+                }
+            }
+            
             html += '</tr>';
             datePickerBody.innerHTML = html;
             
@@ -1773,14 +2525,24 @@
             const dateCells = document.querySelectorAll('#date-picker-body td[data-date]');
             dateCells.forEach(cell => {
                 if (!cell.hasAttribute('disabled')) {
-                    cell.addEventListener('click', function() {
+                    const handleClick = function() {
                         vibrate();
                         document.querySelectorAll('#date-picker-body td.selected').forEach(sel => {
                             sel.classList.remove('selected');
                         });
-                        this.classList.add('selected');
-                        selectedDate = new Date(this.getAttribute('data-date'));
-                    });
+                        cell.classList.add('selected');
+                        selectedDate = new Date(cell.getAttribute('data-date'));
+                    };
+                    
+                    // 為td和內部的div都添加事件監聽
+                    cell.addEventListener('click', handleClick);
+                    const divElement = cell.querySelector('div');
+                    if (divElement) {
+                        divElement.addEventListener('click', function(e) {
+                            e.stopPropagation(); // 阻止冒泡，避免觸發兩次
+                            handleClick();
+                        });
+                    }
                 }
             });
         }
@@ -1850,6 +2612,21 @@
             document.getElementById('date-picker-cancel').addEventListener('click', function() {
                 vibrate();
                 document.getElementById('date-picker-overlay').style.display = 'none';
+            });
+            
+            // 新增：今日按鈕事件
+            document.getElementById('date-picker-today').addEventListener('click', function() {
+                vibrate();
+                const today = new Date();
+                
+                // 設置當前視圖月份為今天的月份
+                currentViewMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+                
+                // 更新選擇的日期為今天
+                selectedDate = new Date(today);
+                
+                // 更新日期選擇器
+                updateDatePicker();
             });
         }
 
@@ -1966,6 +2743,28 @@
                 }
             });
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+                // 設置輸入框點擊事件
+                document.getElementById('total-amount').addEventListener('click', function() {
+                    openCalculator('total-amount', '請輸入【總金額】');
+                });
+                
+                document.getElementById('payment-amount').addEventListener('click', function() {
+                    openCalculator('payment-amount', '請輸入【繳款金額】');
+                });
+                
+                document.getElementById('check-count').addEventListener('click', function() {
+                    openCalculator('check-count', '請輸入【開票張數】');
+                });
+                
+                // 點擊模態框背景關閉
+                document.getElementById('numberInputModal').addEventListener('click', function(event) {
+                if (event.target === this) {
+                    closeModal('numberInputModal');
+                }
+            });
+        });
 
         // 顯示/隱藏歷史記錄面板
         function toggleHistoryPanel() {
@@ -2164,6 +2963,82 @@
             <div class="modal-footer">
                 <button class="modal-btn modal-btn-secondary" onclick="hideConfirmModal()">取消</button>
                 <button id="confirmModalOk" class="modal-btn modal-btn-primary">確定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 數字輸入器模態框 -->
+    <div id="numberInputModal" class="modal-overlay">
+        <div class="number-input-modal">
+            <div class="modal-header">
+                <h3 id="inputModalTitle">數字輸入器</h3>
+                <button class="close-btn" onclick="closeModal('numberInputModal')">×</button>
+            </div>
+
+            <div class="calculator-display-container">
+                <div class="calculator-scroll-indicator" id="historyScrollIndicator"></div>
+                <div class="calculator-history" id="calculatorHistory"></div>
+                <div class="calculator-display" id="calculatorDisplay">0</div>
+            </div>
+
+            <div class="calculator-buttons">
+                <!-- 第一行：功能鍵 -->
+                <button onclick="calculatorClear()" class="clear">C</button>
+                <button onclick="calculatorBackspace()" class="function">⌫</button>
+                <button onclick="calculatorOperation('/')" class="operator">÷</button>
+                <button onclick="calculatorOperation('*')" class="operator">×</button>
+                
+                <!-- 第二行：數字和減號 -->
+                <button onclick="calculatorInput(7)" class="number-btn">
+                    <div class="arabic-number">7</div>
+                    <div class="financial-char">柒</div>
+                </button>
+                <button onclick="calculatorInput(8)" class="number-btn">
+                    <div class="arabic-number">8</div>
+                    <div class="financial-char">捌</div>
+                </button>
+                <button onclick="calculatorInput(9)" class="number-btn">
+                    <div class="arabic-number">9</div>
+                    <div class="financial-char">玖</div>
+                </button>
+                <button onclick="calculatorOperation('-')" class="operator">−</button>
+                
+                <!-- 第三行：數字和加號 -->
+                <button onclick="calculatorInput(4)" class="number-btn">
+                    <div class="arabic-number">4</div>
+                    <div class="financial-char">肆</div>
+                </button>
+                <button onclick="calculatorInput(5)" class="number-btn">
+                    <div class="arabic-number">5</div>
+                    <div class="financial-char">伍</div>
+                </button>
+                <button onclick="calculatorInput(6)" class="number-btn">
+                    <div class="arabic-number">6</div>
+                    <div class="financial-char">陸</div>
+                </button>
+                <button onclick="calculatorOperation('+')" class="operator">+</button>
+                
+                <!-- 第四行：底部數字和等號 -->
+                <button onclick="calculatorInput(1)" class="number-btn">
+                    <div class="arabic-number">1</div>
+                    <div class="financial-char">壹</div>
+                </button>
+                <button onclick="calculatorInput(2)" class="number-btn">
+                    <div class="arabic-number">2</div>
+                    <div class="financial-char">貳</div>
+                </button>
+                <button onclick="calculatorInput(3)" class="number-btn">
+                    <div class="arabic-number">3</div>
+                    <div class="financial-char">參</div>
+                </button>
+                <button onclick="calculatorEquals()" class="equals">=</button>
+                
+                <!-- 第五行：零和更寬的等號鍵 -->
+                <button onclick="calculatorInput(0)" class="zero number-btn">
+                    <div class="arabic-number">0</div>
+                    <div class="financial-char">零</div>
+                </button>
+                <button onclick="submitCalculatorValue()" class="submit">確認輸入</button>
             </div>
         </div>
     </div>
