@@ -4,7 +4,7 @@
 
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-192x192.png">
-    <meta name="theme-color" content="#ff9c33">
+    <meta name="theme-color" content="#333333">
     <link rel="apple-touch-icon" href="icon-192x192.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -454,7 +454,7 @@
         /* 跨年度提示樣式 */
         .year-change-row {
             background: transparent !important;
-            height: 20px;
+            height: 12px; /* 從20px降低到12px */
         }
 
         .year-change-row:hover {
@@ -465,7 +465,7 @@
             position: relative;
             height: 1px;
             background: linear-gradient(to right, transparent, rgba(255, 156, 51, 0.3), transparent);
-            margin: 10px 0;
+            margin: 5px 0; /* 從10px降低到5px */
             text-align: center;
         }
 
@@ -1673,6 +1673,150 @@
             box-shadow: 0 2px 6px rgba(255, 156, 51, 0.4);
         }
 
+        .chinese-display {
+            background-color: #222222;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 5px 12px;
+            margin-right: 10px;
+            height: 36px; /* 與其他輸入框相同的高度 */
+            line-height: 26px; /* 垂直居中文字 */
+            color: var(--text-color);
+            text-align: right;
+            font-size: 18px;  /* 已由原來的 16px 增大至 18px */
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+            overflow-x: auto;
+            white-space: nowrap;
+            width: 185px; /* 與其他輸入框相同的寬度 */
+            box-sizing: border-box;
+        }
+
+        .financial-digit {
+            color: #FFBE7A; /* 較淺的橘色，更接近白色 */
+            display: inline; /* 確保是行內元素 */
+        }
+
+        .row-no-label {
+            justify-content: center;
+            padding: 3px 15px;
+        }
+
+        .full-width {
+            width: 100%;
+            margin-right: 0;
+        }
+
+        .deposit-info-card {
+            margin-top: 15px;
+            padding: 12px 15px;
+            background-color: #3a3a3a; /* 顏色稍微調亮一點 */
+            border-radius: 8px;
+            color: #ffffff;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            border-left: 4px solid var(--button-orange);
+            animation: fadeIn 0.5s ease-out;
+            display: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .deposit-info-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, var(--button-orange), transparent);
+        }
+
+        .deposit-amount-display {
+            font-weight: bold;
+            font-size: 20px;
+            text-align: center;
+            padding-bottom: 10px;
+            margin: 0;
+            border-bottom: 1px solid rgba(255, 156, 51, 0.3);
+            /* 移除了 display: block; */
+        }
+
+        .deposit-chinese-display {
+            text-align: center;
+            font-size: 22px;
+            padding: 5px 0; /* 減少上下填充 */
+            color: #FFD19A;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .deposit-chinese-display::before {
+            content: '';  /* 移除文字內容 */
+            font-size: 14px;
+            color: #aaa;
+            display: none; /* 不顯示元素 */
+            text-align: center;
+            margin-bottom: 5px;
+            font-weight: normal;
+            text-shadow: none;
+        }
+
+        /* 金額與大寫連接樣式 */
+        .amount-group {
+            margin: 0 0 6px 0; /* 減少整體間距 */
+        }
+
+        .row.amount-row {
+            margin-bottom: 0;
+            border-radius: 4px 4px 0 0;
+            padding-bottom: 2px; /* 減少內部間距 */
+        }
+
+        .row.chinese-row {
+            margin-top: 0;
+            background-color: #3a3a3a;
+            border-radius: 0 0 4px 4px;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            padding: 0; /* 移除內部間距以利用全部空間 */
+            border-top: 1px solid rgba(255, 156, 51, 0.2);
+            height: 36px; /* 增加高度 */
+            display: flex; /* 添加 flex 佈局 */
+            align-items: center; /* 垂直居中 */
+        }
+
+        .chinese-display {
+            font-size: 18px;
+            width: 100%; /* 修改為占據全寬 */
+            padding: 5px 12px;
+            margin-right: 0; /* 移除右邊距 */
+            color: #FFBE7A;
+            text-align: center; /* 修改為居中顯示 */
+            background: none;
+            border: none;
+            box-shadow: none;
+            line-height: 32px; /* 修改行高以垂直居中 */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex; /* 添加 flex 布局 */
+            align-items: center; /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
+            height: 100%; /* 讓高度填滿父元素 */
+        }
+
+        .chinese-display.full-width {
+            width: 100%;
+            padding: 5px 15px;
+            text-align: center;
+        }
+
+        #payment-amount-chinese, #deposit-amount-chinese {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -1694,9 +1838,14 @@
         <input type="text" id="total-amount" readonly onclick="openCalculator('total-amount', '總金額')">
     </div>
     
-    <div class="row">
-        <span class="label">繳款金額</span>
-        <input type="text" id="payment-amount" readonly onclick="openCalculator('payment-amount', '繳款金額')">
+    <div class="amount-group">
+        <div class="row amount-row">
+            <span class="label">繳款金額</span>
+            <input type="text" id="payment-amount" readonly onclick="openCalculator('payment-amount', '繳款金額')">
+        </div>
+        <div class="row chinese-row">
+            <div id="payment-amount-chinese" class="chinese-display full-width"></div>
+        </div>
     </div>
     
     <div class="row">
@@ -1704,9 +1853,14 @@
         <input type="text" id="check-count" readonly onclick="openCalculator('check-count', '開票張數')">
     </div>
     
-    <div class="row">
-        <span class="label">押票金額</span>
-        <input type="text" id="deposit-amount" readonly>
+    <div class="amount-group">
+        <div class="row amount-row">
+            <span class="label">押票金額</span>
+            <input type="text" id="deposit-amount" readonly>
+        </div>
+        <div class="row chinese-row">
+            <div id="deposit-amount-chinese" class="chinese-display full-width"></div>
+        </div>
     </div>
     
     <div class="row">
@@ -1729,8 +1883,13 @@
         </div>
     </div>
     
-    <div class="deposit-amount-display" id="deposit-amount-display">
-        <!-- 這裡會顯示押票金額 -->
+    <div class="deposit-info-card">
+        <div class="deposit-amount-display" id="deposit-amount-display">
+            <!-- 這裡會顯示押票金額 -->
+        </div>
+        <div class="deposit-chinese-display" id="deposit-amount-display-chinese">
+            <!-- 這裡會顯示押票金額大寫 -->
+        </div>
     </div>
     
     <div class="divider-flow"></div>
@@ -1742,7 +1901,7 @@
         </div>
     </div>
     
-    <div class="footer-message">記得先設定金額與開始日期喔！</div>
+    <div class="footer-message">蓋完支票後記得要吃碗火雞肉飯唷！</div>
     
     <div class="footer-spacing"></div>
     
@@ -2138,13 +2297,18 @@
                 
                 // 更新押票金額顯示
                 document.getElementById('deposit-amount').value = formatNumber(depositAmount);
+                updateChineseDisplay(); // 確保這行存在，以更新大寫顯示
                 document.getElementById('deposit-amount-display').textContent = `押票金額：${formatNumber(depositAmount)}`;
-                document.getElementById('deposit-amount-display').style.display = 'block';
+                // 更新下方卡片中的國字大寫顯示
+                const chineseAmount = arabicToChineseNumber(depositAmount, 'financial') + ' 圓整';
+                document.getElementById('deposit-amount-display-chinese').innerHTML = chineseAmount;
+                document.querySelector('.deposit-info-card').style.display = 'block';
             } else {
                 // 清空押票金額
                 document.getElementById('deposit-amount').value = '';
                 document.getElementById('deposit-amount-display').textContent = '';
-                document.getElementById('deposit-amount-display').style.display = 'none';
+                document.getElementById('deposit-amount-display-chinese').innerHTML = '';
+                document.querySelector('.deposit-info-card').style.display = 'none';
                 depositAmount = 0;
             }
         }
@@ -2286,6 +2450,8 @@
                                 generateCheckList();
                                 
                                 document.getElementById('calculator-overlay').style.display = 'none';
+
+                                updateChineseDisplay(); // 更新大寫顯示
                             }
                             break;
                             
@@ -2355,6 +2521,7 @@
                     // 新增這兩行
                     totalAmount = value;
                     calculateDepositAmount(); // 重新計算押票金額
+                    updateChineseDisplay(); // 更新大寫顯示
                     break;
                     
                 case 'payment-amount':
@@ -2369,6 +2536,7 @@
                     // 新增這兩行
                     paymentAmount = value;
                     calculateDepositAmount(); // 重新計算押票金額
+                    updateChineseDisplay(); // 添加這行以即時更新大寫顯示
                     break;
                     
                 case 'check-count':
@@ -2744,6 +2912,8 @@
             });
         }
 
+        updateChineseDisplay(); // 初始化大寫顯示
+
         document.addEventListener('DOMContentLoaded', function() {
                 // 設置輸入框點擊事件
                 document.getElementById('total-amount').addEventListener('click', function() {
@@ -2866,9 +3036,11 @@
                 // 顯示押票金額
                 if (depositAmount > 0) {
                     document.getElementById('deposit-amount-display').textContent = `押票金額：${formatNumber(depositAmount)}`;
-                    document.getElementById('deposit-amount-display').style.display = 'block';
+                    const chineseAmount = arabicToChineseNumber(depositAmount, 'financial') + ' 圓整';
+                    document.getElementById('deposit-amount-display-chinese').innerHTML = chineseAmount;
+                    document.querySelector('.deposit-info-card').style.display = 'block';
                 } else {
-                    document.getElementById('deposit-amount-display').style.display = 'none';
+                    document.querySelector('.deposit-info-card').style.display = 'none';
                 }
                 
                 // 關閉歷史面板
@@ -2876,6 +3048,9 @@
                 
                 showToast('已載入支票計算資料');
             }
+
+            updateChineseDisplay(); // 初始化大寫顯示
+
         }
 
         // 刪除單筆數據
@@ -2931,6 +3106,123 @@
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
             return `${year}/${month}/${day}`;
+        }
+
+        // 阿拉伯數字轉換為中文大寫函數
+        function arabicToChineseNumber(num, format) {
+            // 分割整數和小數部分
+            const parts = String(num).split('.');
+            const integerPart = parts[0];
+            const decimalPart = parts.length > 1 ? parts[1] : '';
+            
+            // 根據格式選擇對應的字符
+            let digits, units;
+            if (format === 'traditional') {
+                digits = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+                units = ['', '十', '百', '千', '萬', '十', '百', '千', '億', '十', '百', '千', '兆'];
+            } else if (format === 'financial') {
+                digits = ['零', '壹', '貳', '參', '肆', '伍', '陸', '柒', '捌', '玖'];
+                units = ['', '拾', '佰', '仟', '萬', '拾', '佰', '仟', '億', '拾', '佰', '仟', '兆'];
+            }
+            
+            // 處理整數部分
+            let intResult = '';
+            if (integerPart === '0') {
+                intResult = format === 'financial' ? '<span class="financial-digit">零</span>' : digits[0];
+            } else {
+                const len = integerPart.length;
+                
+                // 特殊處理10-19的數字
+                if (format !== 'financial' && len === 2 && integerPart.charAt(0) === '1') {
+                    intResult = units[1];
+                    if (integerPart.charAt(1) !== '0') {
+                        intResult += digits[parseInt(integerPart.charAt(1))];
+                    }
+                } else {
+                    // 新增變量來追蹤上一個處理過的字符是否為零，以及是否已經添加了單位
+                    let lastWasZero = false;
+                    let hasAddedUnit = false;
+                    
+                    for (let i = 0; i < len; i++) {
+                        const digit = parseInt(integerPart.charAt(i));
+                        const pos = len - i - 1;
+                        
+                        if (digit !== 0) {
+                            // 非零數字直接轉換並加上單位
+                            lastWasZero = false;
+                            hasAddedUnit = false;
+                            
+                            // 在 financial 格式中為數字添加特殊標籤
+                            if (format === 'financial') {
+                                intResult += `<span class="financial-digit">${digits[digit]}</span>${units[pos]}`;
+                            } else {
+                                intResult += digits[digit] + units[pos];
+                            }
+                        } else {
+                            // 處理零的特殊規則
+                            if (pos === 4 || pos === 8) {
+                                // 萬位或億位的零，需要加上對應的單位，但不需要加上"零"字
+                                if (intResult.length > 0) {
+                                    // 確保沒有連續加入同一單位
+                                    if (!intResult.endsWith(units[4]) && !intResult.endsWith(units[8])) {
+                                        intResult += units[pos];
+                                        hasAddedUnit = true;
+                                    }
+                                }
+                            } else if (i < len - 1 && integerPart.charAt(i + 1) !== '0' && !lastWasZero) {
+                                // 當前數字是0，下一個不是0，且上一個不是0，加上零
+                                if (format === 'financial') {
+                                    intResult += `<span class="financial-digit">${digits[0]}</span>`;
+                                } else {
+                                    intResult += digits[0];
+                                }
+                                lastWasZero = true;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // 處理小數部分
+            let decResult = '';
+            if (decimalPart) {
+                decResult = '點';
+                for (let i = 0; i < decimalPart.length; i++) {
+                    if (format === 'financial') {
+                        decResult += `<span class="financial-digit">${digits[parseInt(decimalPart.charAt(i))]}</span>`;
+                    } else {
+                        decResult += digits[parseInt(decimalPart.charAt(i))];
+                    }
+                }
+            }
+            
+            // 組合結果
+            return intResult + decResult;
+        }
+
+        // 更新大寫顯示
+        function updateChineseDisplay() {
+            // 繳款金額轉換
+            const paymentAmount = document.getElementById('payment-amount').value;
+            if (paymentAmount) {
+                // 移除可能存在的千分位符號
+                const cleanAmount = paymentAmount.replace(/,/g, '');
+                const chineseAmount = arabicToChineseNumber(cleanAmount, 'financial') + ' 圓整';
+                document.getElementById('payment-amount-chinese').innerHTML = chineseAmount;
+            } else {
+                document.getElementById('payment-amount-chinese').innerHTML = '';
+            }
+            
+            // 押票金額轉換
+            const depositAmount = document.getElementById('deposit-amount').value;
+            if (depositAmount) {
+                // 移除可能存在的千分位符號
+                const cleanAmount = depositAmount.replace(/,/g, '');
+                const chineseAmount = arabicToChineseNumber(cleanAmount, 'financial') + ' 圓整';
+                document.getElementById('deposit-amount-chinese').innerHTML = chineseAmount;
+            } else {
+                document.getElementById('deposit-amount-chinese').innerHTML = '';
+            }
         }
         
         // 加载完成后启动应用
