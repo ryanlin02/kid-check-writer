@@ -1,7 +1,7 @@
 {
     "name": "小朋友開支票",
     "short_name": "開支票",
-    "description": "方便管理支票開立的工具",
+    "description": "方便管理支票開立的小工具",
     "start_url": "/kid-check-writer/",
     "display": "standalone",
     "background_color": "#333333",
