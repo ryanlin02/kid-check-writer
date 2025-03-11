@@ -2385,7 +2385,7 @@
         // 計算押票金額
         function calculateDepositAmount() {
             if (totalAmount && paymentAmount && checkCount) {
-                depositAmount = totalAmount - (paymentAmount * checkCount);
+                depositAmount = totalAmount - (paymentAmount * checkCount) + paymentAmount;
                 
                 if (depositAmount <= 0) {
                     document.getElementById('deposit-amount').value = '';
