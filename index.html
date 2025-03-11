@@ -1916,6 +1916,19 @@
             border-bottom: 1px solid rgba(255, 156, 51, 0.3);
         }
 
+        .deposit-info-tip {
+            margin-top: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #eeeeee;
+            background-color: rgba(255, 156, 51, 0.15);
+            border-left: 3px solid rgba(255, 156, 51, 0.5);
+            text-align: left;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
     </style>
 </head>
 <body>
@@ -1988,6 +2001,9 @@
         </div>
         <div class="deposit-chinese-display" id="deposit-amount-display-chinese">
             <!-- 這裡會顯示押票金額大寫 -->
+        </div>
+        <div class="deposit-info-tip" id="deposit-amount-tip">
+            <!-- 這裡會顯示提示訊息 -->
         </div>
     </div>
     
@@ -2403,6 +2419,19 @@
                 const chineseAmount = arabicToChineseNumber(depositAmount, 'financial') + ' 圓整';
                 document.getElementById('deposit-amount-display-chinese').innerHTML = chineseAmount;
                 document.querySelector('.deposit-info-card').style.display = 'block';
+
+                // 檢查押票金額與繳款金額的關係，顯示相應提示
+                const tipElement = document.getElementById('deposit-amount-tip');
+                if (depositAmount < paymentAmount) {
+                    tipElement.textContent = '押票金額小於繳款金額，請再次檢查金額。';
+                    tipElement.style.display = 'block';
+                } else if (depositAmount === paymentAmount) {
+                    tipElement.textContent = '押票金額等於繳款金額，此為最後一張支票。';
+                    tipElement.style.display = 'block';
+                } else {
+                    tipElement.style.display = 'none';
+                }
+
             } else {
                 // 清空押票金額
                 document.getElementById('deposit-amount').value = '';
@@ -2410,6 +2439,9 @@
                 document.getElementById('deposit-amount-display-chinese').innerHTML = '';
                 document.querySelector('.deposit-info-card').style.display = 'none';
                 depositAmount = 0;
+
+                document.getElementById('deposit-amount-tip').style.display = 'none';
+
             }
         }
         
@@ -2622,6 +2654,7 @@
                     totalAmount = value;
                     calculateDepositAmount(); // 重新計算押票金額
                     updateChineseDisplay(); // 更新大寫顯示
+                    if (startDate) generateCheckList(); // 如果有開始日期，則重新生成日期列表
                     break;
                     
                 case 'payment-amount':
@@ -2637,6 +2670,7 @@
                     paymentAmount = value;
                     calculateDepositAmount(); // 重新計算押票金額
                     updateChineseDisplay(); // 添加這行以即時更新大寫顯示
+                    if (startDate) generateCheckList(); // 如果有開始日期，則重新生成日期列表
                     break;
                     
                 case 'check-count':
@@ -2645,13 +2679,14 @@
                         showToast('錯誤：開票張數不能超過2位數', true);
                         return;
                     }
-                    value = Math.round(value);
-                    document.getElementById(currentInputField).value = formatNumber(value);
-                    
-                    // 新增這兩行
-                    checkCount = value;
-                    calculateDepositAmount(); // 重新計算押票金額
-                    break;
+    value = Math.round(value);
+    document.getElementById(currentInputField).value = formatNumber(value);
+    
+    // 新增這兩行
+    checkCount = value;
+    calculateDepositAmount(); // 重新計算押票金額
+    if (startDate) generateCheckList(); // 如果有開始日期，則重新生成日期列表
+    break;
             }
             
             // 關閉模態框
@@ -3161,8 +3196,23 @@
                     const chineseAmount = arabicToChineseNumber(depositAmount, 'financial') + ' 圓整';
                     document.getElementById('deposit-amount-display-chinese').innerHTML = chineseAmount;
                     document.querySelector('.deposit-info-card').style.display = 'block';
+
+                    // 檢查押票金額與繳款金額的關係，顯示相應提示
+                    const tipElement = document.getElementById('deposit-amount-tip');
+                    if (depositAmount < paymentAmount) {
+                        tipElement.textContent = '押票金額小於繳款金額，請再次檢查金額。';
+                        tipElement.style.display = 'block';
+                    } else if (depositAmount === paymentAmount) {
+                        tipElement.textContent = '押票金額等於繳款金額，此為最後一張支票。';
+                        tipElement.style.display = 'block';
+                    } else {
+                        tipElement.style.display = 'none';
+                    }
+
                 } else {
                     document.querySelector('.deposit-info-card').style.display = 'none';
+
+                    document.getElementById('deposit-amount-tip').style.display = 'none';
                 }
                 
                 // 關閉歷史面板
@@ -3372,6 +3422,9 @@
             
             // 隱藏押票金額卡片
             document.querySelector('.deposit-info-card').style.display = 'none';
+
+            // 隱藏押票金額提示
+            document.getElementById('deposit-amount-tip').style.display = 'none';
             
             // 清空開票日期列表
             document.getElementById('check-list-content').innerHTML = '';
